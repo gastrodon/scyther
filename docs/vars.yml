@@ -1,0 +1,52 @@
+vars:
+    response:
+        generic_404:
+            description: Nothing was found here
+            body:
+                lang: json
+                content: |-
+                    {"error": "not_found"}
+        queue_404:
+            description: Nothing is on the queue here
+
+    data:
+        request:
+            post_queue:
+                lang: json
+                content: |-
+                    {
+                        $raw.partial_queue
+                    }
+        response:
+            get_queues:
+                lang: json
+                content: |-
+                    {
+                        "queues": [
+                            $json.single_queue,
+                            "..."
+                        ],
+                        "count": {
+                            "queues": "int length of the queues list"
+                        }
+                    }
+            get_single_queue:
+                lang: json
+                content: |-
+                    {
+                        "queue": $json.single_queue
+                    }
+
+    json:
+        single_queue: |-
+            {
+                "id": "queue UUID",
+                $raw.partial_queue,
+                "size": "int size of this queue"
+            }
+
+    raw:
+        partial_queue: |-
+            "name": "queue name",
+            "ephemeral": "is this queue ephemeral?",
+            "capacity": "capacity of this queue"
