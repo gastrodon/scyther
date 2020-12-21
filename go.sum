@@ -1,4 +1,10 @@
+github.com/gastrodon/groudon v0.0.0-20200711221335-e03fb5f2db52 h1:xCQMl3HSHA2GgcbP4wjuQkOKS1Z0eJ9jTxHPp7ahWLQ=
+github.com/gastrodon/groudon v0.0.0-20200711221335-e03fb5f2db52/go.mod h1:5pCqXI8gvquh7Lp7S3LOpUgQ32JXWdrIKums+zpPwjs=
 github.com/gastrodon/groudon v0.0.0-20200810225227-33d8da43a46d h1:ymso08KxnpwmB4m8VT8cwFbCeuai35P1zEP0/Ax3x0g=
 github.com/gastrodon/groudon v0.0.0-20200810225227-33d8da43a46d/go.mod h1:5pCqXI8gvquh7Lp7S3LOpUgQ32JXWdrIKums+zpPwjs=
+github.com/gastrodon/groudon v1.0.0 h1:VyDHAfo4EM5KWfmKPofXfz2x2aj5gKfC1nfb2/iItEg=
+github.com/gastrodon/groudon v1.0.0/go.mod h1:5pCqXI8gvquh7Lp7S3LOpUgQ32JXWdrIKums+zpPwjs=
 github.com/mitchellh/mapstructure v1.3.2 h1:mRS76wmkOn3KkKAyXDu42V+6ebnXWIztFSYGN7GeoRg=
 github.com/mitchellh/mapstructure v1.3.2/go.mod h1:bFUtVrKA4DC2yAKiSyO/QUcy7e+RRV2QTWOzhPopBRo=
+github.com/mitchellh/mapstructure v1.4.0 h1:7ks8ZkOP5/ujthUsT07rNv+nkLXCQWKNHuwzOAesEks=
+github.com/mitchellh/mapstructure v1.4.0/go.mod h1:bFUtVrKA4DC2yAKiSyO/QUcy7e+RRV2QTWOzhPopBRo=
