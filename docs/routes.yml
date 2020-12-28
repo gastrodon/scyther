@@ -2,9 +2,8 @@ routes:
     /queues:
         GET:
             description: |-
-                GET a list of queues, with some information about them
-                queues returned are ordered firstly by creation time,
-                secondly by UUID
+                Get information about every queue,
+                ordered by order created
             responses:
                 200:
                     description: A list of queues

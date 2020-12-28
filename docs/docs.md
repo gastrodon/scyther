@@ -1,15 +1,14 @@
 <details>
 <summary>GET /queues</summary>
 
-GET a list of queues, with some information about them
-queues returned are ordered firstly by creation time,
-secondly by UUID
+Get information about every queue,
+ordered by order created
 
 
 
 
 
-#### Responses
+##### Responses
 - `200`
 
   A list of queues
@@ -32,6 +31,7 @@ secondly by UUID
     }
 }
 ```
+
 
 
 </details>
@@ -59,12 +59,13 @@ Create a queue
 ```
 
 
-#### Responses
+##### Responses
 - `200`
 
   The queue was created
 
   
+
 
 </details>
 
@@ -77,7 +78,7 @@ Get information about this queue
 
 
 
-#### Responses
+##### Responses
 - `200`
 
   Information about this queue
@@ -108,6 +109,7 @@ Get information about this queue
 ```
 
 
+
 </details>
 
 <details>
@@ -121,12 +123,13 @@ populated with the sent message
 
 
 
-#### Responses
+##### Responses
 - `201`
 
   The message was put onto the queue's tail
 
   
+
 
 </details>
 
@@ -141,12 +144,13 @@ nothing will happen
 
 
 
-#### Responses
+##### Responses
 - `204`
 
   Queue was deleted
 
   
+
 
 </details>
 
@@ -163,7 +167,7 @@ where the most recent message will be
 
 
 
-#### Responses
+##### Responses
 - `200`
 
   Whatever is on the queue at this index
@@ -175,6 +179,7 @@ where the most recent message will be
   Nothing is on the queue here
 
   
+
 
 </details>
 
@@ -189,7 +194,7 @@ This is equivalent to `GET /queues/:queue/consume/0`
 
 
 
-#### Responses
+##### Responses
 - `200`
 
   Whatever is on this queue's head
@@ -201,6 +206,7 @@ This is equivalent to `GET /queues/:queue/consume/0`
   Nothing is on the queue here
 
   
+
 
 </details>
 
@@ -216,7 +222,7 @@ Thus allowing you to "peek" at messages
 
 
 
-#### Responses
+##### Responses
 - `200`
 
   Whatever is on the queue at this index
@@ -228,6 +234,7 @@ Thus allowing you to "peek" at messages
   Nothing is on the queue here
 
   
+
 
 </details>
 
@@ -243,7 +250,7 @@ where `<len>` == this queue's length - 1
 
 
 
-#### Responses
+##### Responses
 - `200`
 
   Whatever is on this queue's tail
@@ -255,5 +262,6 @@ where `<len>` == this queue's length - 1
   Nothing is on the queue here
 
   
+
 
 </details>
