@@ -13,6 +13,7 @@ func main() {
 	storage.Connect(os.Getenv("SCYTHER_CONNECTION"))
 
 	groudon.RegisterHandler("GET", "^/queues/?$", api.GetQueues)
+	groudon.RegisterHandler("POST", "^/queues/?$", api.CreateQueue)
 
 	http.HandleFunc("/", groudon.Route)
 	http.ListenAndServe(":8000", nil)
