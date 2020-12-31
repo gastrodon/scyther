@@ -33,6 +33,11 @@ func Connect(address string) {
 	create()
 }
 
+func Clear() {
+	database.Exec(CLEAR_TABLE_QUEUES)
+	database.Exec(CLEAR_TABLE_ITEMS)
+}
+
 func ReadQueues() (queues []types.QueueGet, count int, err error) {
 	count = countQueues()
 	queues = make([]types.QueueGet, count)
