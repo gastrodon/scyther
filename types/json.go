@@ -14,8 +14,8 @@ type QueueGet struct {
 
 type QueuePost struct {
 	Name      *string `json:"name"`
-	Ephemeral string  `json:"ephemeral"`
-	Capacity  int     `json:"capacity"`
+	Ephemeral bool    `json:"ephemeral"`
+	Capacity  *int    `json:"capacity"`
 }
 
 func (QueuePost) Validators() (values map[string]func(interface{}) (bool, error)) {
@@ -30,7 +30,7 @@ func (QueuePost) Validators() (values map[string]func(interface{}) (bool, error)
 
 func (QueuePost) Defaults() (values map[string]interface{}) {
 	values = map[string]interface{}{
-		"name":      "",
+		"name":      nil,
 		"ephemeral": true,
 		"capacity":  nil,
 	}
