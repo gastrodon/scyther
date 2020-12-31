@@ -64,7 +64,13 @@ Create a queue
 
   The queue was created
 
-  
+  #### Body
+```json
+{
+    "id": "queue UUID"
+}
+```
+
 
 
 </details>

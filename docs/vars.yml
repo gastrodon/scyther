@@ -11,13 +11,20 @@ vars:
 
     data:
         request:
-            post_queue:
+            post_queues:
                 lang: json
                 content: |-
                     {
                         $raw.partial_queue
                     }
         response:
+            post_queues:
+                lang: json
+                content: |-
+                    {
+                        "id": "queue UUID"
+                    }
+
             get_queues:
                 lang: json
                 content: |-
@@ -30,6 +37,7 @@ vars:
                             "queues": "int length of the queues list"
                         }
                     }
+
             get_single_queue:
                 lang: json
                 content: |-

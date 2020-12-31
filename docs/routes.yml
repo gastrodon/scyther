@@ -37,10 +37,11 @@ routes:
                           whatever is on the head is pushed out in a fifo style.
                           If the capacity is null, the queue has an unlimited size
                       default: "`null`"
-            body: $data.request.post_queue
+            body: $data.request.post_queues
             responses:
                 200:
                     description: The queue was created
+                    body: $data.response.post_queues
 
     /queues/:queue:
         GET:
