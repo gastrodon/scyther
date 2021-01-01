@@ -35,7 +35,7 @@ func Connect(address string) {
 
 func Clear() {
 	database.Exec(CLEAR_TABLE_QUEUES)
-	database.Exec(CLEAR_TABLE_ITEMS)
+	database.Exec(CLEAR_TABLE_MESSAGES)
 }
 
 func ReadQueues() (queues []types.QueueGet, count int, err error) {

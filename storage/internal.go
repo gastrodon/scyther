@@ -9,7 +9,7 @@ func create() {
 		panic(err)
 	}
 
-	if _, err := database.Exec(CREATE_TABLE_ITEMS); err != nil {
+	if _, err := database.Exec(CREATE_TABLE_MESSAGES); err != nil {
 		panic(err)
 	}
 }
