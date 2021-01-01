@@ -45,3 +45,15 @@ func CreateQueue(request *http.Request) (code int, RMap map[string]interface{}, 
 	RMap = map[string]interface{}{"id": id}
 	return
 }
+
+func GetQueue(request *http.Request) (code int, RMap map[string]interface{}, err error) {
+	code = 501
+	RMap = map[string]interface{}{"error": "unimplemented"}
+	return
+}
+
+func DeleteQueue(request *http.Request) (code int, RMap map[string]interface{}, err error) {
+	code = 501
+	RMap = map[string]interface{}{"error": "unimplemented"}
+	return
+}

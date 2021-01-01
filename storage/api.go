@@ -9,15 +9,19 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
+const (
+	QUEUE_NAME_PATTERN = "[A-Za-z0-9-_]{1,255}"
+)
+
+var (
+	database *sql.DB
+)
+
 type tableDescriptor struct {
 	Name   string
 	Fields string
 	Schema string
 }
-
-var (
-	database *sql.DB
-)
 
 func Connect(address string) {
 	var err error
