@@ -109,3 +109,24 @@ func WriteQueue(queue types.QueuePost) (id string, err error) {
 	_, err = database.Exec(WRITE_QUEUE, id, queue.Name, queue.Capacity)
 	return
 }
+
+func DeleteQueue(id string) (err error) {
+	return
+}
+
+func ReadHead(id string, consume bool) (data []byte, err error) {
+	data, err = ReadIndex(id, 0, consume)
+	return
+}
+
+func ReadTail(id string, consume bool) (data []byte, err error) {
+	return
+}
+
+func ReadIndex(id string, index int, consume bool) (data []byte, err error) {
+	return
+}
+
+func dropMessage(id string) (err error) {
+	return
+}
