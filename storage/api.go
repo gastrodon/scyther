@@ -51,7 +51,7 @@ func ReadQueues() (queues []types.QueueGet, count int, err error) {
 	}
 
 	var rows *sql.Rows
-	if rows, err = database.Query(READ_MANY_QUEUES); err != nil || rows == nil {
+	if rows, err = database.Query(READ_QUEUES); err != nil || rows == nil {
 		return
 	}
 
@@ -73,6 +73,32 @@ func ReadQueues() (queues []types.QueueGet, count int, err error) {
 			Ephemeral: false,
 		}
 		index++
+	}
+
+	return
+}
+
+func ReadQueue(id string) (queue types.QueueGet, exists bool, err error) {
+	var trash string
+	var name *string
+	var capacity *int
+	var size int
+	if err = database.QueryRow(READ_QUEUE, id).Scan(&trash, &name, &capacity, &size); err != nil {
+		if err == sql.ErrNoRows {
+			err = nil
+			exists = false
+		}
+
+		return
+	}
+
+	exists = true
+	queue = types.QueueGet{
+		ID:        trash,
+		Name:      name,
+		Capacity:  capacity,
+		Size:      size,
+		Ephemeral: false,
 	}
 
 	return
