@@ -178,9 +178,15 @@ where the most recent message will be
 
   Whatever is on the queue at this index
 
-  
+  #### Body
+```json
+{
+    "message": "enqueue'd message"
+}
+```
 
-- `400`
+
+- `404`
 
   Nothing is on the queue here
 
@@ -205,9 +211,15 @@ This is equivalent to `GET /queues/:queue/consume/0`
 
   Whatever is on this queue's head
 
-  
+  #### Body
+```json
+{
+    "message": "enqueue'd message"
+}
+```
 
-- `400`
+
+- `404`
 
   Nothing is on the queue here
 
@@ -233,9 +245,15 @@ Thus allowing you to "peek" at messages
 
   Whatever is on the queue at this index
 
-  
+  #### Body
+```json
+{
+    "message": "enqueue'd message"
+}
+```
 
-- `400`
+
+- `404`
 
   Nothing is on the queue here
 
@@ -261,9 +279,15 @@ where `<len>` == this queue's length - 1
 
   Whatever is on this queue's tail
 
-  
+  #### Body
+```json
+{
+    "message": "enqueue'd message"
+}
+```
 
-- `400`
+
+- `404`
 
   Nothing is on the queue here
 

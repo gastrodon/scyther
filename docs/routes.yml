@@ -79,7 +79,8 @@ routes:
             responses:
                 200:
                     description: Whatever is on this queue's head
-                400: $response.queue_404
+                    body: $data.response.get_message
+                404: $response.queue_404
 
     /queues/:queue/tail:
         GET:
@@ -91,7 +92,8 @@ routes:
             responses:
                 200:
                     description: Whatever is on this queue's tail
-                400: $response.queue_404
+                    body: $data.response.get_message
+                404: $response.queue_404
 
     /queues/:queue/consume/:index:
         GET:
@@ -104,7 +106,8 @@ routes:
             responses:
                 200:
                     description: Whatever is on the queue at this index
-                400: $response.queue_404
+                    body: $data.response.get_message
+                404: $response.queue_404
 
     /queues/:queue/peek/:index:
         GET:
@@ -116,4 +119,5 @@ routes:
             responses:
                 200:
                     description: Whatever is on the queue at this index
-                400: $response.queue_404
+                    body: $data.response.get_message
+                404: $response.queue_404

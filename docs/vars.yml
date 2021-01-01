@@ -17,6 +17,7 @@ vars:
                     {
                         $raw.partial_queue
                     }
+
         response:
             post_queues:
                 lang: json
@@ -43,6 +44,13 @@ vars:
                 content: |-
                     {
                         "queue": $json.single_queue
+                    }
+
+            get_message:
+                lang: json
+                content: |-
+                    {
+                        "message": "enqueue'd message"
                     }
 
     json:
