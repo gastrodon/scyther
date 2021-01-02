@@ -114,16 +114,16 @@ func DeleteQueue(id string) (err error) {
 	return
 }
 
-func ReadHead(id string, consume bool) (data []byte, err error) {
-	data, err = ReadIndex(id, 0, consume)
+func ReadHead(id string, consume bool) (data []byte, exists bool, err error) {
+	data, exists, err = ReadIndex(id, 0, consume)
 	return
 }
 
-func ReadTail(id string, consume bool) (data []byte, err error) {
+func ReadTail(id string, consume bool) (data []byte, exists bool, err error) {
 	return
 }
 
-func ReadIndex(id string, index int, consume bool) (data []byte, err error) {
+func ReadIndex(id string, index int, consume bool) (data []byte, exists bool, err error) {
 	return
 }
 

@@ -2,8 +2,11 @@ package api
 
 import (
 	"github.com/gastrodon/scyther/storage"
+	"github.com/gastrodon/scyther/types"
+	"github.com/google/uuid"
 
 	"bytes"
+	"context"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -46,6 +49,40 @@ func newRequestMarshalled(method, path string, data interface{}) (request *http.
 	return
 }
 
+func newRequestForQueue(method, path string, data io.Reader, target string) (request *http.Request) {
+	request = newRequest(method, path, data).WithContext(
+		context.WithValue(context.Background(), keyQueue, target),
+	)
+
+	return
+}
+
+func queuePermutation(named, capped, ephemeral int) (queue map[string]interface{}) {
+	queue = make(map[string]interface{})
+
+	switch named {
+	case VALUED:
+		queue["name"] = uuid.New().String()
+	case NIL:
+		queue["name"] = nil
+	}
+
+	switch capped {
+	case VALUED:
+		queue["capacity"] = 512
+	case NIL:
+		queue["capacity"] = nil
+
+	}
+
+	switch ephemeral {
+	case VALUED:
+		queue["ephemeral"] = false
+	}
+
+	return
+}
+
 func codeOk(code, want int, test *testing.T) {
 	if code != want {
 		test.Errorf("code %d != wanted %d", code, want)
@@ -55,5 +92,48 @@ func codeOk(code, want int, test *testing.T) {
 func uuidOk(uuid string, test *testing.T) {
 	if !uuidRegex.MatchString(uuid) {
 		test.Fatalf("%s doesn't match the pattern %s", uuid, UUID_PATTERN)
+	}
+}
+
+func queueOk(queue types.QueueGet, name *string, capacity *int, test *testing.T) {
+	if name != nil && queue.Name == nil {
+		test.Fatalf("queue %s isn't named", queue.ID)
+	}
+
+	if name != nil && *queue.Name != *name {
+		test.Fatalf("queue %s is misnamed, %s != %s", queue.ID, *name, *queue.Name)
+	}
+
+	if capacity != nil && queue.Capacity == nil {
+		test.Fatalf("queue %s isn't capped", queue.ID)
+	}
+
+	if capacity != nil && *queue.Capacity != *capacity {
+		test.Fatalf("queue %s is miscapped, %d != %d", queue.ID, *capacity, *queue.Capacity)
+	}
+}
+
+func messageOk(message, want []byte, test *testing.T) {
+	if message == nil && want == nil {
+		return
+	}
+
+	if message == nil && want != nil {
+		test.Fatal("message is nil")
+	}
+
+	if message != nil && want == nil {
+		test.Fatal("message is not nil")
+	}
+
+	if len(message) != len(want) {
+		test.Fatalf("lengths incorrect, %d != %d", len(message), len(want))
+	}
+
+	var index int
+	for index = range message {
+		if message[index] != want[index] {
+			test.Fatalf("byte incorrect at %d, %d != %d", index, message[index], want[index])
+		}
 	}
 }

@@ -2,7 +2,6 @@ package api
 
 import (
 	"github.com/gastrodon/scyther/storage"
-	"github.com/google/uuid"
 
 	"bytes"
 	"net/http"
@@ -14,32 +13,6 @@ const (
 	MISSING
 	NIL
 )
-
-func postQueuePermutation(named, capped, ephemeral int) (queue map[string]interface{}) {
-	queue = make(map[string]interface{})
-
-	switch named {
-	case VALUED:
-		queue["name"] = uuid.New().String()
-	case NIL:
-		queue["name"] = nil
-	}
-
-	switch capped {
-	case VALUED:
-		queue["capacity"] = 512
-	case NIL:
-		queue["capacity"] = nil
-
-	}
-
-	switch ephemeral {
-	case VALUED:
-		queue["ephemeral"] = false
-	}
-
-	return
-}
 
 func Test_CreateQueue(test *testing.T) {
 	test.Cleanup(storage.Clear)
@@ -60,7 +33,7 @@ func Test_CreateQueue(test *testing.T) {
 	for names != 0 {
 		for capacities != 0 {
 			for ephemerals != 0 {
-				queues[index] = postQueuePermutation(names, capacities, ephemerals)
+				queues[index] = queuePermutation(names, capacities, ephemerals)
 				ephemerals--
 				index++
 			}
