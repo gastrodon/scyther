@@ -91,22 +91,3 @@ func Test_GetQueues_ordered(test *testing.T) {
 		index++
 	}
 }
-
-func Test_GetQueue(test *testing.T) {
-	test.Cleanup(storage.Clear)
-
-	var name string = "get_me"
-	var capacity int = 420
-	var id string
-	id, _ = storage.WriteQueue(types.QueuePost{&name, &capacity, false})
-
-	var code int
-	var RMap map[string]interface{}
-	var err error
-	if code, RMap, err = GetQueue(newRequestForQueue("GET", "/queues/"+id, nil, id)); err != nil {
-		test.Fatal(err)
-	}
-
-	codeOk(code, 200, test)
-	queueOk(RMap["queue"].(types.QueueGet), &name, &capacity, test)
-}
