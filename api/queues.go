@@ -47,8 +47,21 @@ func CreateQueue(request *http.Request) (code int, RMap map[string]interface{}, 
 }
 
 func GetQueue(request *http.Request) (code int, RMap map[string]interface{}, err error) {
-	code = 501
-	RMap = map[string]interface{}{"error": "unimplemented"}
+	var id string = request.Context().Value(keyQueue).(string)
+	var queue types.QueueGet
+	var exists bool
+	if queue, exists, err = storage.ReadQueue(id); err != nil {
+		return
+	}
+
+	if !exists {
+		code = 400
+		RMap = targetNotFound
+		return
+	}
+
+	code = 200
+	RMap = map[string]interface{}{"queue": queue}
 	return
 }
 
