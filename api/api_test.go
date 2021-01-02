@@ -76,7 +76,7 @@ func queuePermutation(named, capped, ephemeral int) (queue map[string]interface{
 
 func codeOk(code, want int, test *testing.T) {
 	if code != want {
-		test.Errorf("code %d != wanted %d", code, want)
+		test.Fatalf("code %d != wanted %d", code, want)
 	}
 }
 
