@@ -237,7 +237,7 @@ func Test_ResolveQueueTarget_noTarget(test *testing.T) {
 	var ok bool
 	var code int
 	var err error
-	if _, ok, code, _, err = ResolveQueueTarget(newRequest("GET", "/queues/foobar", nil)); err != nil {
+	if _, ok, code, _, err = ResolveQueueTarget(newRequest("GET", "/queues", nil)); err != nil {
 		test.Fatal(err)
 	}
 
