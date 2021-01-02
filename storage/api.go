@@ -79,11 +79,11 @@ func ReadQueues() (queues []types.QueueGet, count int, err error) {
 }
 
 func ReadQueue(id string) (queue types.QueueGet, exists bool, err error) {
-	var trash string
+	var idRead string
 	var name *string
 	var capacity *int
 	var size int
-	if err = database.QueryRow(READ_QUEUE, id).Scan(&trash, &name, &capacity, &size); err != nil {
+	if err = database.QueryRow(READ_QUEUE, id).Scan(&idRead, &name, &capacity, &size); err != nil {
 		if err == sql.ErrNoRows {
 			err = nil
 			exists = false
@@ -94,7 +94,7 @@ func ReadQueue(id string) (queue types.QueueGet, exists bool, err error) {
 
 	exists = true
 	queue = types.QueueGet{
-		ID:        trash,
+		ID:        idRead,
 		Name:      name,
 		Capacity:  capacity,
 		Size:      size,
