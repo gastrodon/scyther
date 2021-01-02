@@ -123,6 +123,10 @@ func WriteQueue(queue types.QueuePost) (id string, err error) {
 }
 
 func DeleteQueue(id string) (err error) {
+	if _, err = database.Exec(DELETE_QUEUE, id); err == nil {
+		_, err = database.Exec(DELETE_MESSAGES, id)
+	}
+
 	return
 }
 
