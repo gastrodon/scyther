@@ -21,7 +21,7 @@ var (
 )
 
 func TestMain(main *testing.M) {
-	storage.Connect(os.Getenv("SCYTHER_CONNECTION"))
+	storage.Connect(os.Getenv("SCYTHER_CONNECTION_TEST_API"))
 	storage.Clear()
 	os.Exit(main.Run())
 }
