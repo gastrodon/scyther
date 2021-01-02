@@ -17,10 +17,13 @@ const (
 	ROUTE_QUEUE_TAIL    = `^/queues/` + storage.QUEUE_NAME_PATTERN + `/tail/?$`
 	ROUTE_QUEUE_CONSUME = `^/queues/` + storage.QUEUE_NAME_PATTERN + `/consume/[\d]+/?$`
 	ROUTE_QUEUE_PEEK    = `^/queues/` + storage.QUEUE_NAME_PATTERN + `/peek/[\d]+/?$`
+	ROUTE_TARGETED      = `^/queues/` + storage.QUEUE_NAME_PATTERN + `(/.*)?$`
 )
 
 func main() {
 	storage.Connect(os.Getenv("SCYTHER_CONNECTION"))
+
+	groudon.RegisterMiddlewareRoute([]string{"GET", "PUT", "DELETLE"}, ROUTE_TARGETED, api.ResolveQueueTarget)
 
 	groudon.RegisterHandler("GET", ROUTE_QUEUES, api.GetQueues)
 	groudon.RegisterHandler("POST", ROUTE_QUEUES, api.CreateQueue)
