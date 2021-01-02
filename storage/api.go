@@ -86,7 +86,6 @@ func ReadQueue(id string) (queue types.QueueGet, exists bool, err error) {
 	if err = database.QueryRow(READ_QUEUE, id).Scan(&idRead, &name, &capacity, &size); err != nil {
 		if err == sql.ErrNoRows {
 			err = nil
-			exists = false
 		}
 
 		return
@@ -101,6 +100,19 @@ func ReadQueue(id string) (queue types.QueueGet, exists bool, err error) {
 		Ephemeral: false,
 	}
 
+	return
+}
+
+func ResolveNameId(name string) (id string, exists bool, err error) {
+	if err = database.QueryRow(READ_QUEUE_ID, name).Scan(&id); err != nil {
+		if err == sql.ErrNoRows {
+			err = nil
+		}
+
+		return
+	}
+
+	exists = true
 	return
 }
 
