@@ -139,6 +139,10 @@ func ReadIndex(id string, index int, consume bool) (data []byte, exists bool, er
 	return
 }
 
+func WriteMessage(id string, message []byte) (err error) {
+	return
+}
+
 func dropMessage(id string) (err error) {
 	return
 }
