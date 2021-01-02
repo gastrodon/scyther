@@ -5,7 +5,7 @@ const (
 	TABLE_MESSAGES = "messages"
 
 	FIELDS_QUEUES   = "id, name, capacity, size"
-	FIELDS_MESSAGES = "id, queue, data"
+	FIELDS_MESSAGES = "queue, data"
 
 	SCHEMA_QUEUES = `
 	        id CHAR(36) UNIQUE PRIMARY KEY NOT NULL,
@@ -14,7 +14,6 @@ const (
 	        size BIGINT UNSIGNED NOT NULL,
 	        ordered BIGINT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT`
 	SCHEMA_MESSAGES = `
-			id CHAR(36) UNIQUE PRIMARY KEY NOT NULL,
 			queue CHAR(36) NOT NULL,
 			data BINARY(255) NOT NULL,
 			ordered BIGINT UNSIGNED UNIQUE NOT NULL AUTO_INCREMENT`
