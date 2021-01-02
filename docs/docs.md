@@ -20,8 +20,8 @@ ordered by order created
         {
             "id": "queue UUID",
             "name": "queue name",
-            "ephemeral": "is this queue ephemeral?",
             "capacity": "capacity of this queue",
+            "ephemeral": "is this queue ephemeral?",
             "size": "int size of this queue"
         },
         "..."
@@ -44,17 +44,17 @@ Create a queue
 ###### Body
 |name|type|description|default|
 | - | - | - | - |
-|name|string|Name of this queue. Can be used instead interchangeably with its id in API calls, and so it should be unique|random|
+|name|optional string|Name of this queue. Can be used instead interchangeably with its id in API calls, and so it should be unique|`null`|
+|capacity|optional int|The capacity of this queue If messages are pushed onto a full queue, whatever is on the head is pushed out in a fifo style. If the capacity is null, the queue has an unlimited size|`null`|
 |ephemeral|bool|Is this queue ephemeral? Ephemeral queues are not backed by any storage, but instead are completely in memory. This allowes them to be written to read read from quickly, but they are lost when the server goes down|`false`|
-|capacity|int or null|The capacity of this queue If messages are pushed onto a full queue, whatever is on the head is pushed out in a fifo style. If the capacity is null, the queue has an unlimited size|`null`|
 
 
 #### Body
 ```json
 {
     "name": "queue name",
-    "ephemeral": "is this queue ephemeral?",
-    "capacity": "capacity of this queue"
+    "capacity": "capacity of this queue",
+    "ephemeral": "is this queue ephemeral?"
 }
 ```
 
@@ -68,6 +68,18 @@ Create a queue
 ```json
 {
     "id": "queue UUID"
+}
+```
+
+
+- `409`
+
+  A queue of this name already exists
+
+  #### Body
+```json
+{
+    "error": "conflict"
 }
 ```
 
@@ -95,8 +107,8 @@ Get information about this queue
     "queue": {
         "id": "queue UUID",
         "name": "queue name",
-        "ephemeral": "is this queue ephemeral?",
         "capacity": "capacity of this queue",
+        "ephemeral": "is this queue ephemeral?",
         "size": "int size of this queue"
     }
 }
@@ -105,12 +117,12 @@ Get information about this queue
 
 - `400`
 
-  Nothing was found here
+  No such queue exists
 
   #### Body
 ```json
 {
-    "error": "not_found"
+    "error": "no_queue"
 }
 ```
 
@@ -135,6 +147,30 @@ populated with the sent message
   The message was put onto the queue's tail
 
   
+
+- `406`
+
+  A message couldn't be enqueued because the queue is at capacity
+
+  #### Body
+```json
+{
+    "error": "at_capacity"
+}
+```
+
+
+- `413`
+
+  The message is too long to fit on the queue
+
+  #### Body
+```json
+{
+    "error": "message_too_long"
+}
+```
+
 
 
 </details>
@@ -188,9 +224,15 @@ where the most recent message will be
 
 - `404`
 
-  Nothing is on the queue here
+  No message exists on the queue here
 
-  
+  #### Body
+```json
+{
+    "error": "no_message"
+}
+```
+
 
 
 </details>
@@ -221,9 +263,15 @@ This is equivalent to `GET /queues/:queue/consume/0`
 
 - `404`
 
-  Nothing is on the queue here
+  No message exists on the queue here
 
-  
+  #### Body
+```json
+{
+    "error": "no_message"
+}
+```
+
 
 
 </details>
@@ -255,9 +303,15 @@ Thus allowing you to "peek" at messages
 
 - `404`
 
-  Nothing is on the queue here
+  No message exists on the queue here
 
-  
+  #### Body
+```json
+{
+    "error": "no_message"
+}
+```
+
 
 
 </details>
@@ -289,9 +343,15 @@ where `<len>` == this queue's length - 1
 
 - `404`
 
-  Nothing is on the queue here
+  No message exists on the queue here
 
-  
+  #### Body
+```json
+{
+    "error": "no_message"
+}
+```
+
 
 
 </details>

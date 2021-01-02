@@ -14,34 +14,36 @@ routes:
             tables:
                 Body:
                     - name: name
-                      type: string
+                      type: optional string
                       description: >-
                           Name of this queue.
                           Can be used instead interchangeably with its id
                           in API calls, and so it should be unique
-                      default: random
-                    - name: ephemeral
-                      type: bool
-                      description: >-
-                          Is this queue ephemeral?
-                          Ephemeral queues are not backed by any storage,
-                          but instead are completely in memory.
-                          This allowes them to be written to read read from quickly,
-                          but they are lost when the server goes down
-                      default: "`false`"
+                      default: "`null`"
                     - name: capacity
-                      type: int or null
+                      type: optional int
                       description: >-
                           The capacity of this queue
                           If messages are pushed onto a full queue,
                           whatever is on the head is pushed out in a fifo style.
                           If the capacity is null, the queue has an unlimited size
                       default: "`null`"
+                    - name: ephemeral
+                      type: bool
+                      description: >-
+                        Is this queue ephemeral?
+                        Ephemeral queues are not backed by any storage,
+                        but instead are completely in memory.
+                        This allowes them to be written to read read from quickly,
+                        but they are lost when the server goes down
+                      default: "`false`"
             body: $data.request.post_queues
             responses:
                 200:
                     description: The queue was created
                     body: $data.response.post_queues
+
+                409: $response.generic_409
 
     /queues/:queue:
         GET:
@@ -60,6 +62,8 @@ routes:
             responses:
                 201:
                     description: The message was put onto the queue's tail
+                406: $response.queue_406
+                413: $response.queue_413
 
         DELETE:
             description: |-

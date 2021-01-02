@@ -1,13 +1,41 @@
 vars:
     response:
         generic_404:
-            description: Nothing was found here
+            description: No such queue exists
             body:
                 lang: json
                 content: |-
-                    {"error": "not_found"}
+                    {"error": "no_queue"}
+
+        generic_409:
+            description: A queue of this name already exists
+            body:
+                lang: json
+                content: |-
+                    {"error": "conflict"}
+
         queue_404:
-            description: Nothing is on the queue here
+            description: No message exists on the queue here
+            body:
+                lang: json
+                content: |-
+                    {"error": "no_message"}
+
+        queue_406:
+            description: >-
+                A message couldn't be enqueued
+                because the queue is at capacity
+            body:
+                lang: json
+                content: |-
+                    {"error": "at_capacity"}
+
+        queue_413:
+            description: The message is too long to fit on the queue
+            body:
+                lang: json
+                content: |-
+                    {"error": "message_too_long"}
 
     data:
         request:
@@ -64,5 +92,5 @@ vars:
     raw:
         partial_queue: |-
             "name": "queue name",
-            "ephemeral": "is this queue ephemeral?",
-            "capacity": "capacity of this queue"
+            "capacity": "capacity of this queue",
+            "ephemeral": "is this queue ephemeral?"
