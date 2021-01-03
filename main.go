@@ -23,7 +23,7 @@ const (
 func main() {
 	storage.Connect(os.Getenv("SCYTHER_CONNECTION"))
 
-	groudon.RegisterMiddlewareRoute([]string{"GET", "PUT", "DELETLE"}, ROUTE_TARGETED, api.ResolveQueueTarget)
+	groudon.RegisterMiddlewareRoute([]string{"GET", "PUT", "DELETE"}, ROUTE_TARGETED, api.ResolveQueueTarget)
 
 	groudon.RegisterHandler("GET", ROUTE_QUEUES, api.GetQueues)
 	groudon.RegisterHandler("POST", ROUTE_QUEUES, api.CreateQueue)
