@@ -10,3 +10,9 @@ func TestMain(main *testing.M) {
 	Clear()
 	os.Exit(main.Run())
 }
+
+func messageOk(message, want string, test *testing.T) {
+	if message != want {
+		test.Fatalf("message incorrect, %s != %s", message, want)
+	}
+}

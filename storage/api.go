@@ -5,6 +5,7 @@ import (
 	"github.com/google/uuid"
 
 	"database/sql"
+	"errors"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -14,7 +15,8 @@ const (
 )
 
 var (
-	database *sql.DB
+	database      *sql.DB
+	ErrAtCapacity = errors.New("This message overflows the queue")
 )
 
 type tableDescriptor struct {
@@ -130,20 +132,34 @@ func DeleteQueue(id string) (err error) {
 	return
 }
 
-func ReadHead(queue string, consume bool) (data []byte, exists bool, err error) {
+func ReadHead(queue string, consume bool) (data string, exists bool, err error) {
 	data, exists, err = ReadIndex(queue, 0, consume)
 	return
 }
 
-func ReadTail(queue string, consume bool) (data []byte, exists bool, err error) {
+func ReadTail(queue string, consume bool) (data string, exists bool, err error) {
 	return
 }
 
-func ReadIndex(queue string, index int, consume bool) (data []byte, exists bool, err error) {
+func ReadIndex(queue string, index int, consume bool) (data string, exists bool, err error) {
 	return
 }
 
-func WriteMessage(queue string, message []byte) (err error) {
+func WriteMessage(queue string, message string) (err error) {
+	var available bool
+	if available, err = queueHasSpace(queue); err != nil {
+		return
+	}
+
+	if !available {
+		err = ErrAtCapacity
+		return
+	}
+
+	if _, err = database.Exec(WRITE_MESSAGE, queue, message); err == nil {
+		err = incrementSize(queue)
+	}
+
 	return
 }
 
