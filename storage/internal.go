@@ -80,3 +80,24 @@ func countQueues() (size int) {
 
 	return
 }
+
+func incrementSize(id string) (err error) {
+	_, err = database.Exec(INCREMENT_QUEUE_SIZE, id)
+	return
+}
+
+func decrementSize(id string) (err error) {
+	_, err = database.Exec(DECREMENT_QUEUE_SIZE, id)
+	return
+}
+
+func readAvailableCapacity(id string) (available int, capped bool, err error) {
+	return
+}
+
+func queueHasSpace(id string) (available bool, err error) {
+	var optionalAvailable *bool
+	err = database.QueryRow(READ_QUEUE_HAS_CAPACITY, id).Scan(&optionalAvailable)
+	available = optionalAvailable == nil || *optionalAvailable
+	return
+}
