@@ -104,27 +104,8 @@ func queueOk(queue types.QueueGet, name *string, capacity *int, test *testing.T)
 	}
 }
 
-func messageOk(message, want []byte, test *testing.T) {
-	if message == nil && want == nil {
-		return
-	}
-
-	if message == nil && want != nil {
-		test.Fatal("message is nil")
-	}
-
-	if message != nil && want == nil {
-		test.Fatal("message is not nil")
-	}
-
-	if len(message) != len(want) {
-		test.Fatalf("lengths incorrect, %d != %d", len(message), len(want))
-	}
-
-	var index int
-	for index = range message {
-		if message[index] != want[index] {
-			test.Fatalf("byte incorrect at %d, %d != %d", index, message[index], want[index])
-		}
+func messageOk(message, want string, test *testing.T) {
+	if message != want {
+		test.Fatalf("message incorrect, %s != %s", message, want)
 	}
 }

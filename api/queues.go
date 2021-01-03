@@ -49,14 +49,7 @@ func CreateQueue(request *http.Request) (code int, RMap map[string]interface{}, 
 func GetQueue(request *http.Request) (code int, RMap map[string]interface{}, err error) {
 	var id string = request.Context().Value(keyQueue).(string)
 	var queue types.QueueGet
-	var exists bool
-	if queue, exists, err = storage.ReadQueue(id); err != nil {
-		return
-	}
-
-	if !exists {
-		code = 400
-		RMap = targetNotFound
+	if queue, _, err = storage.ReadQueue(id); err != nil {
 		return
 	}
 
@@ -66,7 +59,7 @@ func GetQueue(request *http.Request) (code int, RMap map[string]interface{}, err
 }
 
 func DeleteQueue(request *http.Request) (code int, RMap map[string]interface{}, err error) {
-	code = 501
-	RMap = map[string]interface{}{"error": "unimplemented"}
+	code = 204
+	err = storage.DeleteQueue(request.Context().Value(keyQueue).(string))
 	return
 }
