@@ -30,6 +30,13 @@ vars:
                 content: |-
                     {"error": "at_capacity"}
 
+        queue_411:
+            description: The length header is missing
+            body:
+                lang: json
+                content: |-
+                    {"error": "length_required"}
+
         queue_413:
             description: The message is too long to fit on the queue
             body:

@@ -160,6 +160,18 @@ populated with the sent message
 ```
 
 
+- `411`
+
+  The length header is missing
+
+  #### Body
+```json
+{
+    "error": "length_required"
+}
+```
+
+
 - `413`
 
   The message is too long to fit on the queue

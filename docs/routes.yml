@@ -63,6 +63,7 @@ routes:
                 201:
                     description: The message was put onto the queue's tail
                 406: $response.queue_406
+                411: $response.queue_411
                 413: $response.queue_413
 
         DELETE:
