@@ -13,8 +13,11 @@ var (
 
 	keyQueue = key("queue")
 
-	targetNotFound map[string]interface{} = map[string]interface{}{"error": "no_such_queue"}
+	atCapacity     map[string]interface{} = map[string]interface{}{"error": "at_capacity"}
 	badRequest     map[string]interface{} = map[string]interface{}{"error": "bad_request"}
+	lengthRequired map[string]interface{} = map[string]interface{}{"error": "length_required"}
+	messageTooLong map[string]interface{} = map[string]interface{}{"error": "message_too_long"}
+	targetNotFound map[string]interface{} = map[string]interface{}{"error": "no_such_queue"}
 )
 
 type key string
