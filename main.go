@@ -20,8 +20,12 @@ const (
 	ROUTE_TARGETED      = `^/queues/` + types.NAME_PATTERN + `(/.*)?$`
 )
 
-func main() {
-	storage.Connect(os.Getenv("SCYTHER_CONNECTION"))
+var (
+	connection string = os.Getenv("SCYTHER_CONNECTION")
+)
+
+func setup() {
+	storage.Connect(connection)
 
 	groudon.RegisterMiddlewareRoute([]string{"PUT"}, ROUTE_TARGETED, api.ValidateLength)
 	groudon.RegisterMiddlewareRoute([]string{"GET", "PUT", "DELETE"}, ROUTE_TARGETED, api.ResolveQueueTarget)
@@ -38,5 +42,9 @@ func main() {
 	groudon.RegisterHandler("GET", ROUTE_QUEUE_PEEK, api.PeekIndex)
 
 	http.HandleFunc("/", groudon.Route)
+}
+
+func main() {
+	setup()
 	http.ListenAndServe(":8000", nil)
 }
