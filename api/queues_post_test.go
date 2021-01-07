@@ -77,6 +77,7 @@ func Test_CreateQueue_badRequest(test *testing.T) {
 		newRequestMarshalled("POST", "/queues", map[string]interface{}{"name": ""}),
 		newRequestMarshalled("POST", "/queues", map[string]interface{}{"name": "dunno?"}),
 		newRequestMarshalled("POST", "/queues", map[string]interface{}{"name": longName}),
+		newRequestMarshalled("POST", "/queues", map[string]interface{}{"name": 42069}),
 	}
 
 	var index int = 0
