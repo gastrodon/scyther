@@ -98,8 +98,12 @@ func Test_ConsumeTail_consumes(test *testing.T) {
 	var message string = uuid.New().String()
 	storage.WriteMessage(id, message)
 
-	var RMap map[string]interface{}
 	var err error
+	if _, _, err = ConsumeTail(newRequestForQueue("GET", "/queues/"+id, nil, id)); err != nil {
+		test.Fatal(err)
+	}
+
+	var RMap map[string]interface{}
 	if _, RMap, err = ConsumeTail(newRequestForQueue("GET", "/queues/"+id, nil, id)); err != nil {
 		test.Fatal(err)
 	}
