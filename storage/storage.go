@@ -15,8 +15,9 @@ const (
 )
 
 var (
-	database      *sql.DB
-	ErrAtCapacity = errors.New("This message overflows the queue")
+	database        *sql.DB
+	ErrAtCapacity   = errors.New("This message overflows the queue")
+	ErrNameOccupied = errors.New("This queue's name conflicts another")
 )
 
 type tableDescriptor struct {
@@ -118,7 +119,12 @@ func ResolveNameId(name string) (id string, exists bool, err error) {
 
 func WriteQueue(queue types.QueuePost) (id string, err error) {
 	id = uuid.New().String()
-	_, err = database.Exec(WRITE_QUEUE, id, queue.Name, queue.Capacity)
+	if _, err = database.Exec(WRITE_QUEUE, id, queue.Name, queue.Capacity); err != nil && queue.Name != nil {
+		var exists bool
+		if _, exists, _ = ResolveNameId(*queue.Name); exists {
+			err = ErrNameOccupied
+		}
+	}
 	return
 }
 

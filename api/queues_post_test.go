@@ -2,6 +2,8 @@ package api
 
 import (
 	"github.com/gastrodon/scyther/storage"
+	"github.com/gastrodon/scyther/types"
+	"github.com/google/uuid"
 
 	"bytes"
 	"net/http"
@@ -65,6 +67,22 @@ func Test_CreateQueue(test *testing.T) {
 		var id string = RMap["id"].(string)
 		uuidOk(id, test)
 	}
+}
+
+func Test_CreateQueue_duplicate(test *testing.T) {
+	test.Cleanup(storage.Clear)
+
+	var id string = uuid.New().String()
+	var queue types.QueuePost = types.QueuePost{&id, nil, false}
+	storage.WriteQueue(queue)
+
+	var code int
+	var err error
+	if code, _, err = CreateQueue(newRequestMarshalled("POST", "/queues", queue)); err != nil {
+		test.Fatal(err)
+	}
+
+	codeOk(code, 409, test)
 }
 
 func Test_CreateQueue_badRequest(test *testing.T) {

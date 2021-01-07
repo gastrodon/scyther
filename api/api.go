@@ -19,6 +19,7 @@ var (
 	messageTooLong map[string]interface{} = map[string]interface{}{"error": "message_too_long"}
 	targetNotFound map[string]interface{} = map[string]interface{}{"error": "no_such_queue"}
 	noMessage      map[string]interface{} = map[string]interface{}{"error": "no_message"}
+	conflict       map[string]interface{} = map[string]interface{}{"error": "conflict"}
 )
 
 type key string

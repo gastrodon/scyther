@@ -33,11 +33,18 @@ func CreateQueue(request *http.Request) (code int, RMap map[string]interface{}, 
 
 	if external != nil {
 		code = 400
+		RMap = badRequest
 		return
 	}
 
 	var id string
 	if id, err = storage.WriteQueue(data); err != nil {
+		if err == storage.ErrNameOccupied {
+			err = nil
+			code = 409
+			RMap = conflict
+		}
+
 		return
 	}
 
