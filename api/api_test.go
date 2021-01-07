@@ -49,8 +49,9 @@ func newRequestForQueue(method, path string, data io.Reader, target string) (req
 }
 
 func newRequestForQueueIndex(method, path string, data io.Reader, target string, index int) (request *http.Request) {
-	request = newRequestForQueue(method, path, data, target).WithContext(
-		context.WithValue(context.Background(), keyIndex, index),
+	request = newRequestForQueue(method, path, data, target)
+	request = request.WithContext(
+		context.WithValue(request.Context(), keyIndex, index),
 	)
 
 	return
