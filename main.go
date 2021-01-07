@@ -29,6 +29,8 @@ func setup() {
 
 	groudon.RegisterMiddlewareRoute([]string{"PUT"}, ROUTE_TARGETED, api.ValidateLength)
 	groudon.RegisterMiddlewareRoute([]string{"GET", "PUT", "DELETE"}, ROUTE_TARGETED, api.ResolveQueueTarget)
+	groudon.RegisterMiddlewareRoute([]string{"GET"}, ROUTE_QUEUE_CONSUME, api.ResolveQueueIndex)
+	groudon.RegisterMiddlewareRoute([]string{"GET"}, ROUTE_QUEUE_PEEK, api.ResolveQueueIndex)
 
 	groudon.RegisterHandler("GET", ROUTE_QUEUES, api.GetQueues)
 	groudon.RegisterHandler("POST", ROUTE_QUEUES, api.CreateQueue)
