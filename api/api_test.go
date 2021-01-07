@@ -89,6 +89,12 @@ func codeOk(code, want int, test *testing.T) {
 	}
 }
 
+func indexOk(index, want int, test *testing.T) {
+	if index != want {
+		test.Fatalf("index %d != wanted %d", index, want)
+	}
+}
+
 func uuidOk(uuid string, test *testing.T) {
 	if !uuidRegex.MatchString(uuid) {
 		test.Fatalf("%s isn't valid UUIDv4", uuid)

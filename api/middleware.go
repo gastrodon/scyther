@@ -5,6 +5,7 @@ import (
 
 	"context"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -59,6 +60,28 @@ func ResolveQueueTarget(request *http.Request) (modified *http.Request, ok bool,
 	}
 
 	modified = requestWithTarget(request, id)
+	return
+}
+
+func ResolveQueueIndex(request *http.Request) (modified *http.Request, ok bool, code int, RMap map[string]interface{}, err error) {
+	var parts []string = strings.FieldsFunc(request.URL.Path, splitPath)
+	var index int
+	if index, err = strconv.Atoi(parts[len(parts)-1]); err != nil {
+		err = nil
+		code = 404
+		RMap = noMessage
+		return
+	}
+
+	ok = true
+	modified = request.WithContext(
+		context.WithValue(
+			request.Context(),
+			keyIndex,
+			index,
+		),
+	)
+
 	return
 }
 

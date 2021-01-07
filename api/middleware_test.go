@@ -249,6 +249,51 @@ func Test_ResolveQueueTarget_noTarget(test *testing.T) {
 	}
 }
 
+func Test_ResolveQueueIndex(test *testing.T) {
+	var request *http.Request
+	var ok bool
+	var err error
+	if request, ok, _, _, err = ResolveQueueIndex(newRequest("GET", "queues/foo/0", nil)); err != nil {
+		test.Fatal(err)
+	}
+
+	if !ok {
+		test.Fatalf("index resolution isn't ok")
+	}
+
+	indexOk(request.Context().Value(keyIndex).(int), 0, test)
+}
+
+func Test_ResolveQueueIndex_negative(test *testing.T) {
+	var request *http.Request
+	var ok bool
+	var err error
+	if request, ok, _, _, err = ResolveQueueIndex(newRequest("GET", "queues/foo/-10", nil)); err != nil {
+		test.Fatal(err)
+	}
+
+	if !ok {
+		test.Fatalf("index resolution isn't ok")
+	}
+
+	indexOk(request.Context().Value(keyIndex).(int), -10, test)
+}
+
+func Test_ResolveQueueIndex_invalid(test *testing.T) {
+	var code int
+	var ok bool
+	var err error
+	if _, ok, code, _, err = ResolveQueueIndex(newRequest("GET", "queues/foo/", nil)); err != nil {
+		test.Fatal(err)
+	}
+
+	if ok {
+		test.Fatalf("invalid index resolution is ok")
+	}
+
+	codeOk(code, 404, test)
+}
+
 func Test_ValidateLength(test *testing.T) {
 	var request *http.Request = newRequest("", "", nil)
 	request.ContentLength = 10
