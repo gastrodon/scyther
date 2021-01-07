@@ -133,16 +133,41 @@ func DeleteQueue(id string) (err error) {
 	return
 }
 
-func ReadHead(queue string, consume bool) (data string, exists bool, err error) {
-	data, exists, err = ReadIndex(queue, 0, consume)
+func ReadHead(queue string) (data string, exists bool, err error) {
+	data, exists, err = ReadIndex(queue, 0, true)
 	return
 }
 
-func ReadTail(queue string, consume bool) (data string, exists bool, err error) {
+func ReadTail(queue string) (data string, exists bool, err error) {
+	var id string
+	if err = database.QueryRow(READ_TAIL, queue).Scan(&id, &data); err != nil {
+		if err == sql.ErrNoRows {
+			err = nil
+		}
+
+		return
+	}
+
+	exists = true
+	_, err = database.Exec(DELETE_MESSAGE, id)
 	return
 }
 
 func ReadIndex(queue string, index int, consume bool) (data string, exists bool, err error) {
+	var id string
+	if err = database.QueryRow(READ_MESSAGE_AT, queue, index).Scan(&id, &data); err != nil {
+		if err == sql.ErrNoRows {
+			err = nil
+		}
+
+		return
+	}
+
+	exists = true
+	if consume {
+		_, err = database.Exec(DELETE_MESSAGE, id)
+	}
+
 	return
 }
 
@@ -157,13 +182,9 @@ func WriteMessage(queue string, message string) (err error) {
 		return
 	}
 
-	if _, err = database.Exec(WRITE_MESSAGE, queue, message); err == nil {
+	if _, err = database.Exec(WRITE_MESSAGE, uuid.New().String(), queue, message); err == nil {
 		err = incrementSize(queue)
 	}
 
-	return
-}
-
-func dropMessage(queue string) (err error) {
 	return
 }
