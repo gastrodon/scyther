@@ -48,6 +48,14 @@ func newRequestForQueue(method, path string, data io.Reader, target string) (req
 	return
 }
 
+func newRequestForQueueIndex(method, path string, data io.Reader, target string, index int) (request *http.Request) {
+	request = newRequestForQueue(method, path, data, target).WithContext(
+		context.WithValue(context.Background(), keyIndex, index),
+	)
+
+	return
+}
+
 func queuePermutation(named, capped, ephemeral int) (queue map[string]interface{}) {
 	queue = make(map[string]interface{})
 

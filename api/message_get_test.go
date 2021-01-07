@@ -132,7 +132,7 @@ func Test_ConsumeIndex(test *testing.T) {
 	var code int
 	var RMap map[string]interface{}
 	var err error
-	if code, RMap, err = ConsumeIndex(newRequestForQueue("GET", "/queues/"+id+"/consume/0", nil, id)); err != nil {
+	if code, RMap, err = ConsumeIndex(newRequestForQueueIndex("GET", "/queues/"+id+"/consume/0", nil, id, 0)); err != nil {
 		test.Fatal(err)
 	}
 
@@ -144,7 +144,7 @@ func Test_ConsumeIndex_noMessages(test *testing.T) {
 	var id string = uuid.New().String()
 	var code int
 	var err error
-	if code, _, err = ConsumeIndex(newRequestForQueue("GET", "/queues/"+id+"/consume/0", nil, id)); err != nil {
+	if code, _, err = ConsumeIndex(newRequestForQueueIndex("GET", "/queues/"+id+"/consume/0", nil, id, 0)); err != nil {
 		test.Fatal(err)
 	}
 
@@ -161,7 +161,7 @@ func Test_ConsumeIndex_outOfBounds(test *testing.T) {
 
 	var code int
 	var err error
-	if code, _, err = ConsumeIndex(newRequestForQueue("GET", "/queues/"+id+"/consume/10", nil, id)); err != nil {
+	if code, _, err = ConsumeIndex(newRequestForQueueIndex("GET", "/queues/"+id+"/consume/10", nil, id, 10)); err != nil {
 		test.Fatal(err)
 	}
 
@@ -178,12 +178,12 @@ func Test_ConsumeIndex_consumes(test *testing.T) {
 	storage.WriteMessage(id, message)
 
 	var err error
-	if _, _, err = ConsumeIndex(newRequestForQueue("GET", "/queues/"+id+"/consume/0", nil, id)); err != nil {
+	if _, _, err = ConsumeIndex(newRequestForQueueIndex("GET", "/queues/"+id+"/consume/0", nil, id, 0)); err != nil {
 		test.Fatal(err)
 	}
 
 	var code int
-	if code, _, err = ConsumeIndex(newRequestForQueue("GET", "/queues/"+id+"/consume/0", nil, id)); err != nil {
+	if code, _, err = ConsumeIndex(newRequestForQueueIndex("GET", "/queues/"+id+"/consume/0", nil, id, 0)); err != nil {
 		test.Fatal(err)
 	}
 
@@ -202,7 +202,7 @@ func Test_PeekIndex(test *testing.T) {
 	var code int
 	var RMap map[string]interface{}
 	var err error
-	if code, RMap, err = PeekIndex(newRequestForQueue("GET", "/queues/"+id+"/peek/0", nil, id)); err != nil {
+	if code, RMap, err = PeekIndex(newRequestForQueueIndex("GET", "/queues/"+id+"/peek/0", nil, id, 0)); err != nil {
 		test.Fatal(err)
 	}
 
@@ -214,7 +214,7 @@ func Test_PeekIndex_noMessages(test *testing.T) {
 	var id string = uuid.New().String()
 	var code int
 	var err error
-	if code, _, err = PeekIndex(newRequestForQueue("GET", "/queues/"+id+"/peek/0", nil, id)); err != nil {
+	if code, _, err = PeekIndex(newRequestForQueueIndex("GET", "/queues/"+id+"/peek/0", nil, id, 0)); err != nil {
 		test.Fatal(err)
 	}
 
@@ -231,7 +231,7 @@ func Test_PeekIndex_outOfBounds(test *testing.T) {
 
 	var code int
 	var err error
-	if code, _, err = PeekIndex(newRequestForQueue("GET", "/queues/"+id+"/peek/10", nil, id)); err != nil {
+	if code, _, err = PeekIndex(newRequestForQueueIndex("GET", "/queues/"+id+"/peek/10", nil, id, 10)); err != nil {
 		test.Fatal(err)
 	}
 
@@ -247,12 +247,12 @@ func Test_PeekIndex_preserves(test *testing.T) {
 
 	var first map[string]interface{}
 	var err error
-	if _, first, err = PeekIndex(newRequestForQueue("GET", "/queues/"+id+"/peek/0", nil, id)); err != nil {
+	if _, first, err = PeekIndex(newRequestForQueueIndex("GET", "/queues/"+id+"/peek/0", nil, id, 0)); err != nil {
 		test.Fatal(err)
 	}
 
 	var second map[string]interface{}
-	if _, second, err = PeekIndex(newRequestForQueue("GET", "/queues/"+id+"/peek/0", nil, id)); err != nil {
+	if _, second, err = PeekIndex(newRequestForQueueIndex("GET", "/queues/"+id+"/peek/0", nil, id, 0)); err != nil {
 		test.Fatal(err)
 	}
 
