@@ -43,25 +43,51 @@ func PutMessage(request *http.Request) (code int, RMap map[string]interface{}, e
 }
 
 func ConsumeHead(request *http.Request) (code int, RMap map[string]interface{}, err error) {
-	code = 501
-	RMap = map[string]interface{}{"error": "unimplemented"}
+	var queue string = request.Context().Value(keyQueue).(string)
+	var message string
+	var exists bool
+	message, exists, err = storage.ReadHead(queue)
+	code, RMap = serveMessage(message, exists)
 	return
 }
 
 func ConsumeTail(request *http.Request) (code int, RMap map[string]interface{}, err error) {
-	code = 501
-	RMap = map[string]interface{}{"error": "unimplemented"}
+	var queue string = request.Context().Value(keyQueue).(string)
+	var message string
+	var exists bool
+	message, exists, err = storage.ReadTail(queue)
+	code, RMap = serveMessage(message, exists)
 	return
 }
 
 func ConsumeIndex(request *http.Request) (code int, RMap map[string]interface{}, err error) {
-	code = 501
-	RMap = map[string]interface{}{"error": "unimplemented"}
+	code, RMap, err = handleIndex(request, true)
 	return
 }
 
 func PeekIndex(request *http.Request) (code int, RMap map[string]interface{}, err error) {
-	code = 501
-	RMap = map[string]interface{}{"error": "unimplemented"}
+	code, RMap, err = handleIndex(request, false)
+	return
+}
+
+func handleIndex(request *http.Request, consume bool) (code int, RMap map[string]interface{}, err error) {
+	var queue string = request.Context().Value(keyQueue).(string)
+	var index int = request.Context().Value(keyIndex).(int)
+	var message string
+	var exists bool
+	message, exists, err = storage.ReadIndex(queue, index, consume)
+	code, RMap = serveMessage(message, exists)
+	return
+}
+
+func serveMessage(message string, exists bool) (code int, RMap map[string]interface{}) {
+	if !exists {
+		code = 404
+		RMap = noMessage
+		return
+	}
+
+	code = 200
+	RMap = map[string]interface{}{"message": message}
 	return
 }
