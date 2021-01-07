@@ -7,10 +7,21 @@ import (
 	"testing"
 )
 
+var (
+	connection string = os.Getenv("SCYTHER_CONNECTION_TEST_STORAGE")
+)
+
 func TestMain(main *testing.M) {
-	Connect(os.Getenv("SCYTHER_CONNECTION_TEST_STORAGE"))
+	Connect(connection)
 	Clear()
 	os.Exit(main.Run())
+}
+
+func Test_Connect_panic(test *testing.T) {
+	test.Cleanup(reconnect)
+	defer expectPanic(test)
+
+	Connect("")
 }
 
 func messageOk(message, want string, test *testing.T) {
@@ -29,5 +40,15 @@ func seedQueue(id string, size int) {
 			id,
 			uuid.New().String(),
 		)
+	}
+}
+
+func reconnect() {
+	Connect(connection)
+}
+
+func expectPanic(test *testing.T) {
+	if recover() == nil {
+		test.Fatal("nothing was paniced")
 	}
 }

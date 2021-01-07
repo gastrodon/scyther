@@ -3,8 +3,17 @@ package storage
 import (
 	"github.com/google/uuid"
 
+	"database/sql"
 	"testing"
 )
+
+func Test_create(test *testing.T) {
+	test.Cleanup(reconnect)
+	defer expectPanic(test)
+
+	database, _ = sql.Open("mysql", "")
+	create()
+}
 
 func Test_incrementSize(test *testing.T) {
 	test.Cleanup(Clear)

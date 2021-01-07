@@ -4,6 +4,7 @@ import (
 	"github.com/gastrodon/scyther/types"
 	"github.com/google/uuid"
 
+	"database/sql"
 	"testing"
 )
 
@@ -51,7 +52,6 @@ func Test_ReadQueues_empty(test *testing.T) {
 		test.Fatalf("inaccurate count: %d != %d", count, len(queues))
 	}
 }
-
 func Test_ReadQueue(test *testing.T) {
 	test.Cleanup(Clear)
 
@@ -83,6 +83,16 @@ func Test_ReadQueue_noSuchQueue(test *testing.T) {
 
 	if exists {
 		test.Fatalf("queue of random id exists")
+	}
+}
+
+func Test_ReadQueue_err(test *testing.T) {
+	test.Cleanup(reconnect)
+	database, _ = sql.Open("mysql", "")
+
+	var err error
+	if _, _, err = ReadQueue(uuid.New().String()); err == nil {
+		test.Fatal("no err was returned")
 	}
 }
 
@@ -151,6 +161,16 @@ func Test_WriteQueue_nameConflict(test *testing.T) {
 
 	if _, err = WriteQueue(types.QueuePost{&name, nil, false}); err == nil {
 		test.Fatalf("No error for duplicate queue %s", name)
+	}
+}
+
+func Test_WriteQueue_err(test *testing.T) {
+	test.Cleanup(reconnect)
+	database, _ = sql.Open("mysql", "")
+
+	var err error
+	if err = WriteMessage(uuid.New().String(), uuid.New().String()); err == nil {
+		test.Fatal("no err was returned")
 	}
 }
 
