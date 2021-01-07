@@ -11,8 +11,7 @@ import (
 )
 
 const (
-	QUEUE_NAME_PATTERN = "[A-Za-z0-9-_]{1,255}"
-	MESSAGE_MAX_SIZE   = 255
+	MESSAGE_MAX_SIZE = 255
 )
 
 var (

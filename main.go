@@ -10,14 +10,13 @@ import (
 )
 
 const (
-	pattern             = storage.QUEUE_NAME_PATTERN
 	ROUTE_QUEUES        = `^/queues/?$`
-	ROUTE_QUEUE         = `^/queues/` + storage.QUEUE_NAME_PATTERN + `/?$`
-	ROUTE_QUEUE_HEAD    = `^/queues/` + storage.QUEUE_NAME_PATTERN + `/head/?$`
-	ROUTE_QUEUE_TAIL    = `^/queues/` + storage.QUEUE_NAME_PATTERN + `/tail/?$`
-	ROUTE_QUEUE_CONSUME = `^/queues/` + storage.QUEUE_NAME_PATTERN + `/consume/[\d]+/?$`
-	ROUTE_QUEUE_PEEK    = `^/queues/` + storage.QUEUE_NAME_PATTERN + `/peek/[\d]+/?$`
-	ROUTE_TARGETED      = `^/queues/` + storage.QUEUE_NAME_PATTERN + `(/.*)?$`
+	ROUTE_QUEUE         = `^/queues/` + api.NAME_PATTERN + `/?$`
+	ROUTE_QUEUE_HEAD    = `^/queues/` + api.NAME_PATTERN + `/head/?$`
+	ROUTE_QUEUE_TAIL    = `^/queues/` + api.NAME_PATTERN + `/tail/?$`
+	ROUTE_QUEUE_CONSUME = `^/queues/` + api.NAME_PATTERN + `/consume/[\d]+/?$`
+	ROUTE_QUEUE_PEEK    = `^/queues/` + api.NAME_PATTERN + `/peek/[\d]+/?$`
+	ROUTE_TARGETED      = `^/queues/` + api.NAME_PATTERN + `(/.*)?$`
 )
 
 func main() {
