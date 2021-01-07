@@ -70,6 +70,7 @@ func Test_ReadIndex_consume(test *testing.T) {
 
 	var message string = "messagable"
 	database.Exec(WRITE_MESSAGE, uuid.New().String(), id, message)
+	database.Exec(INCREMENT_QUEUE_SIZE, id)
 
 	var messageFetched string
 	var exists bool
@@ -102,6 +103,8 @@ func Test_ReadIndex_consumeUpdatesHead(test *testing.T) {
 	var first, second string = uuid.New().String(), uuid.New().String()
 	database.Exec(WRITE_MESSAGE, uuid.New().String(), id, first)
 	database.Exec(WRITE_MESSAGE, uuid.New().String(), id, second)
+	database.Exec(INCREMENT_QUEUE_SIZE, id)
+	database.Exec(INCREMENT_QUEUE_SIZE, id)
 
 	var firstFetched, secondFetched string
 	var err error
@@ -115,6 +118,27 @@ func Test_ReadIndex_consumeUpdatesHead(test *testing.T) {
 
 	messageOk(firstFetched, first, test)
 	messageOk(secondFetched, second, test)
+}
+
+func Test_ReadIndex_consumeDecrements(test *testing.T) {
+	test.Cleanup(Clear)
+
+	var id string = uuid.New().String()
+	database.Exec(WRITE_QUEUE, id, nil, nil)
+	database.Exec(WRITE_MESSAGE, uuid.New().String(), id, uuid.New().String())
+	database.Exec(INCREMENT_QUEUE_SIZE, id)
+
+	var size int
+	database.QueryRow(READ_QUEUE_SIZE, id).Scan(&size)
+	sizeOk(size, 1, test)
+
+	var err error
+	if _, _, err = ReadIndex(id, 0, true); err != nil {
+		test.Fatal(err)
+	}
+
+	database.QueryRow(READ_QUEUE_SIZE, id).Scan(&size)
+	sizeOk(size, 0, test)
 }
 
 func Test_ReadIndex_noSuchQueue(test *testing.T) {
@@ -137,6 +161,7 @@ func Test_ReadHead(test *testing.T) {
 
 	var message string = "messagable"
 	database.Exec(WRITE_MESSAGE, uuid.New().String(), id, message)
+	database.Exec(INCREMENT_QUEUE_SIZE, id)
 
 	var messageFetched string
 	var exists bool
@@ -160,6 +185,7 @@ func Test_ReadHead_headPreserve(test *testing.T) {
 
 	var message string = "messagable"
 	database.Exec(WRITE_MESSAGE, uuid.New().String(), id, message)
+	database.Exec(INCREMENT_QUEUE_SIZE, id)
 
 	seedQueue(id, 10)
 
@@ -182,6 +208,7 @@ func Test_ReadHead_past(test *testing.T) {
 
 	var message string = "messagable"
 	database.Exec(WRITE_MESSAGE, uuid.New().String(), id, message)
+	database.Exec(INCREMENT_QUEUE_SIZE, id)
 
 	var messageFetched string
 	var err error
@@ -206,6 +233,27 @@ func Test_ReadHead_noSuchQueue(test *testing.T) {
 	}
 }
 
+func Test_ReadHead_decrements(test *testing.T) {
+	test.Cleanup(Clear)
+
+	var id string = uuid.New().String()
+	database.Exec(WRITE_QUEUE, id, nil, nil)
+	database.Exec(WRITE_MESSAGE, uuid.New().String(), id, uuid.New().String())
+	database.Exec(INCREMENT_QUEUE_SIZE, id)
+
+	var size int
+	database.QueryRow(READ_QUEUE_SIZE, id).Scan(&size)
+	sizeOk(size, 1, test)
+
+	var err error
+	if _, _, err = ReadHead(id); err != nil {
+		test.Fatal(err)
+	}
+
+	database.QueryRow(READ_QUEUE_SIZE, id).Scan(&size)
+	sizeOk(size, 0, test)
+}
+
 func Test_ReadTail(test *testing.T) {
 	test.Cleanup(Clear)
 
@@ -216,6 +264,7 @@ func Test_ReadTail(test *testing.T) {
 
 	var message string = "messagable"
 	database.Exec(WRITE_MESSAGE, uuid.New().String(), id, message)
+	database.Exec(INCREMENT_QUEUE_SIZE, id)
 
 	var messageFetched string
 	var exists bool
@@ -243,6 +292,27 @@ func Test_ReadTail_noSuchQueue(test *testing.T) {
 	}
 }
 
+func Test_ReadTail_decrements(test *testing.T) {
+	test.Cleanup(Clear)
+
+	var id string = uuid.New().String()
+	database.Exec(WRITE_QUEUE, id, nil, nil)
+	database.Exec(WRITE_MESSAGE, uuid.New().String(), id, uuid.New().String())
+	database.Exec(INCREMENT_QUEUE_SIZE, id)
+
+	var size int
+	database.QueryRow(READ_QUEUE_SIZE, id).Scan(&size)
+	sizeOk(size, 1, test)
+
+	var err error
+	if _, _, err = ReadTail(id); err != nil {
+		test.Fatal(err)
+	}
+
+	database.QueryRow(READ_QUEUE_SIZE, id).Scan(&size)
+	sizeOk(size, 0, test)
+}
+
 func Test_WriteMessage(test *testing.T) {
 	test.Cleanup(Clear)
 
@@ -262,6 +332,18 @@ func Test_WriteMessage(test *testing.T) {
 		message,
 		test,
 	)
+}
+
+func Test_WriteMessage_increments(test *testing.T) {
+	test.Cleanup(Clear)
+
+	var id string = uuid.New().String()
+	database.Exec(WRITE_QUEUE, id, nil, nil)
+	WriteMessage(id, uuid.New().String())
+
+	var size int
+	database.QueryRow(READ_QUEUE_SIZE, id).Scan(&size)
+	sizeOk(size, 1, test)
 }
 
 func Test_WriteMessage_atCapacity(test *testing.T) {

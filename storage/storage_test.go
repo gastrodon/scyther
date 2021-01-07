@@ -52,3 +52,9 @@ func expectPanic(test *testing.T) {
 		test.Fatal("nothing was paniced")
 	}
 }
+
+func sizeOk(size, want int, test *testing.T) {
+	if size != want {
+		test.Fatalf("size %d != want %d", size, want)
+	}
+}

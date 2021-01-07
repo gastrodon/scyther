@@ -146,7 +146,10 @@ func ReadTail(queue string) (data string, exists bool, err error) {
 	}
 
 	exists = true
-	_, err = database.Exec(DELETE_MESSAGE, id)
+	if _, err = database.Exec(DELETE_MESSAGE, id); err == nil {
+		err = decrementSize(queue)
+	}
+
 	return
 }
 
@@ -162,7 +165,9 @@ func ReadIndex(queue string, index int, consume bool) (data string, exists bool,
 
 	exists = true
 	if consume {
-		_, err = database.Exec(DELETE_MESSAGE, id)
+		if _, err = database.Exec(DELETE_MESSAGE, id); err == nil {
+			err = decrementSize(queue)
+		}
 	}
 
 	return
