@@ -45,13 +45,11 @@ func Clear() {
 }
 
 func ReadQueues() (queues []types.QueueGet, count int, err error) {
-	count = countQueues()
-	queues = make([]types.QueueGet, count)
-
-	if count == 0 {
+	if count = countQueues(); count == 0 {
 		return
 	}
 
+	queues = make([]types.QueueGet, count)
 	var rows *sql.Rows
 	if rows, err = database.Query(READ_QUEUES); err != nil || rows == nil {
 		return
