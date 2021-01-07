@@ -11,12 +11,14 @@ var (
 	nameRegex *regexp.Regexp = regexp.MustCompile(types.NAME_PATTERN)
 
 	keyQueue = key("queue")
+	keyIndex = key("index")
 
 	atCapacity     map[string]interface{} = map[string]interface{}{"error": "at_capacity"}
 	badRequest     map[string]interface{} = map[string]interface{}{"error": "bad_request"}
 	lengthRequired map[string]interface{} = map[string]interface{}{"error": "length_required"}
 	messageTooLong map[string]interface{} = map[string]interface{}{"error": "message_too_long"}
 	targetNotFound map[string]interface{} = map[string]interface{}{"error": "no_such_queue"}
+	noMessage      map[string]interface{} = map[string]interface{}{"error": "no_message"}
 )
 
 type key string
