@@ -38,27 +38,6 @@ func Test_PutMessage(test *testing.T) {
 	messageOk(message, messageFetched, test)
 }
 
-func Test_PutMessage_tooLong(test *testing.T) {
-	var id string
-	id, _ = storage.WriteQueue(types.QueuePost{nil, nil, false})
-
-	var size int = 512
-	var data *bytes.Buffer = bytes.NewBuffer(nil)
-	data.Grow(size)
-	for size != 0 {
-		size--
-		data.WriteRune('0')
-	}
-
-	var code int
-	var err error
-	if code, _, err = PutMessage(newRequestForQueue("PUT", "/queues/"+id, data, id)); err != nil {
-		test.Fatal(err)
-	}
-
-	codeOk(code, 413, test)
-}
-
 func Test_PutMessage_pastCapacity(test *testing.T) {
 	var capacity int = 0
 	var id string

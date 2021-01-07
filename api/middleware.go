@@ -61,3 +61,21 @@ func ResolveQueueTarget(request *http.Request) (modified *http.Request, ok bool,
 	modified = requestWithTarget(request, id)
 	return
 }
+
+func ValidateLength(request *http.Request) (_ *http.Request, ok bool, code int, RMap map[string]interface{}, _ error) {
+	var length int64 = request.ContentLength
+	if length <= 0 {
+		code = 411
+		RMap = lengthRequired
+		return
+	}
+
+	if length > storage.MESSAGE_MAX_SIZE {
+		code = 413
+		RMap = lengthRequired
+		return
+	}
+
+	ok = true
+	return
+}

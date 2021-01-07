@@ -76,6 +76,7 @@ func Test_ResolveQueueTarget_named(test *testing.T) {
 		test.Fatalf("queue %s doesn't exist", contextId)
 	}
 }
+
 func Test_ResolveQueueTarget_subRoute(test *testing.T) {
 	test.Cleanup(storage.Clear)
 
@@ -246,4 +247,73 @@ func Test_ResolveQueueTarget_noTarget(test *testing.T) {
 	if ok {
 		test.Fatal("middleware is ok")
 	}
+}
+
+func Test_ValidateLength(test *testing.T) {
+	var request *http.Request = newRequest("", "", nil)
+	request.ContentLength = 10
+
+	var ok bool
+	var err error
+	if _, ok, _, _, err = ValidateLength(request); err != nil {
+		panic(err)
+	}
+
+	if !ok {
+		test.Fatalf("Content-Length %d isn't ok", request.ContentLength)
+	}
+}
+
+func Test_ValidateLength_tooLong(test *testing.T) {
+	var request *http.Request = newRequest("", "", nil)
+	request.ContentLength = 512
+
+	var ok bool
+	var code int
+	var err error
+	if _, ok, code, _, err = ValidateLength(request); err != nil {
+		panic(err)
+	}
+
+	if ok {
+		test.Fatalf("Content-Length %d is ok", request.ContentLength)
+	}
+
+	codeOk(code, 413, test)
+}
+
+func Test_ValidateLength_invalid(test *testing.T) {
+	var request *http.Request = newRequest("", "", nil)
+	request.ContentLength = -1
+
+	var ok bool
+	var code int
+	var err error
+	if _, ok, code, _, err = ValidateLength(request); err != nil {
+		panic(err)
+	}
+
+	if ok {
+		test.Fatalf("Content-Length %d is ok", request.ContentLength)
+	}
+
+	codeOk(code, 411, test)
+}
+
+func Test_ValidateLength_missing(test *testing.T) {
+	var request *http.Request = newRequest("", "", nil)
+	request.ContentLength = 0
+
+	var ok bool
+	var code int
+	var err error
+	if _, ok, code, _, err = ValidateLength(request); err != nil {
+		panic(err)
+	}
+
+	if ok {
+		test.Fatalf("Content-Length %d is ok", request.ContentLength)
+	}
+
+	codeOk(code, 411, test)
 }

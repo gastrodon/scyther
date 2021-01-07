@@ -9,25 +9,10 @@ import (
 )
 
 func PutMessage(request *http.Request) (code int, RMap map[string]interface{}, err error) {
-	// TODO do this in middleware
-	var length int64 = request.ContentLength
-	if length > storage.MESSAGE_MAX_SIZE {
-		code = 413
-		RMap = messageTooLong
-		return
-	}
-
-	if length == -1 {
-		code = 411
-		RMap = lengthRequired
-		return
-	}
-
 	var reader *bufio.Reader = bufio.NewReader(request.Body)
-
 	var index int64
-	var runes []rune = make([]rune, length)
-	for index != length {
+	var runes []rune = make([]rune, request.ContentLength)
+	for index != request.ContentLength {
 		var next rune
 		if next, _, err = reader.ReadRune(); err != nil {
 			if err == io.EOF {
