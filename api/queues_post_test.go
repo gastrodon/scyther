@@ -5,6 +5,7 @@ import (
 
 	"bytes"
 	"net/http"
+	"strings"
 	"testing"
 )
 
@@ -12,6 +13,10 @@ const (
 	VALUED = iota + 1
 	MISSING
 	NIL
+)
+
+var (
+	longName = strings.Repeat("0", 0xFF+1)
 )
 
 func Test_CreateQueue(test *testing.T) {
@@ -68,6 +73,10 @@ func Test_CreateQueue_badRequest(test *testing.T) {
 		// newRequest("POST", "/queues", nil),
 		newRequest("POST", "/queues", bytes.NewBuffer(make([]byte, 0))),
 		newRequest("POST", "/queues", bytes.NewBuffer([]byte{255, 165, 69})),
+		newRequestMarshalled("POST", "/queues", map[string]interface{}{"name": "foo bar with spaces"}),
+		newRequestMarshalled("POST", "/queues", map[string]interface{}{"name": ""}),
+		newRequestMarshalled("POST", "/queues", map[string]interface{}{"name": "dunno?"}),
+		newRequestMarshalled("POST", "/queues", map[string]interface{}{"name": longName}),
 	}
 
 	var request *http.Request
