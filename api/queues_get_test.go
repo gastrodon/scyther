@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/gastrodon/scyther/storage"
 	"github.com/gastrodon/scyther/types"
+	"github.com/google/uuid"
 
 	"testing"
 )
@@ -97,7 +98,7 @@ func Test_GetQueues_ordered(test *testing.T) {
 func Test_GetQueue(test *testing.T) {
 	test.Cleanup(storage.Clear)
 
-	var name string = "get_me"
+	var name string = uuid.New().String()
 	var capacity int = 420
 	var id string
 	id, _ = storage.WriteQueue(types.QueuePost{&name, &capacity, false})

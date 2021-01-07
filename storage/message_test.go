@@ -14,7 +14,7 @@ func Test_ReadIndex(test *testing.T) {
 	var id string = uuid.New().String()
 	database.Exec(WRITE_QUEUE, id, nil, nil)
 
-	var message string = "messagable"
+	var message string = uuid.New().String()
 	database.Exec(WRITE_MESSAGE, uuid.New().String(), id, message)
 
 	var messageFetched string
@@ -37,7 +37,7 @@ func Test_ReadIndex_noConsume(test *testing.T) {
 	var id string = uuid.New().String()
 	database.Exec(WRITE_QUEUE, id, nil, nil)
 
-	var message string = "messagable"
+	var message string = uuid.New().String()
 	database.Exec(WRITE_MESSAGE, uuid.New().String(), id, message)
 
 	var messageFetched string
@@ -68,7 +68,7 @@ func Test_ReadIndex_consume(test *testing.T) {
 	var id string = uuid.New().String()
 	database.Exec(WRITE_QUEUE, id, nil, nil)
 
-	var message string = "messagable"
+	var message string = uuid.New().String()
 	database.Exec(WRITE_MESSAGE, uuid.New().String(), id, message)
 	database.Exec(INCREMENT_QUEUE_SIZE, id)
 
@@ -159,7 +159,7 @@ func Test_ReadHead(test *testing.T) {
 	var id string = uuid.New().String()
 	database.Exec(WRITE_QUEUE, id, nil, nil)
 
-	var message string = "messagable"
+	var message string = uuid.New().String()
 	database.Exec(WRITE_MESSAGE, uuid.New().String(), id, message)
 	database.Exec(INCREMENT_QUEUE_SIZE, id)
 
@@ -183,7 +183,7 @@ func Test_ReadHead_headPreserve(test *testing.T) {
 	var id string = uuid.New().String()
 	database.Exec(WRITE_QUEUE, id, nil, nil)
 
-	var message string = "messagable"
+	var message string = uuid.New().String()
 	database.Exec(WRITE_MESSAGE, uuid.New().String(), id, message)
 	database.Exec(INCREMENT_QUEUE_SIZE, id)
 
@@ -206,7 +206,7 @@ func Test_ReadHead_past(test *testing.T) {
 
 	seedQueue(id, 10)
 
-	var message string = "messagable"
+	var message string = uuid.New().String()
 	database.Exec(WRITE_MESSAGE, uuid.New().String(), id, message)
 	database.Exec(INCREMENT_QUEUE_SIZE, id)
 
@@ -262,7 +262,7 @@ func Test_ReadTail(test *testing.T) {
 
 	seedQueue(id, 10)
 
-	var message string = "messagable"
+	var message string = uuid.New().String()
 	database.Exec(WRITE_MESSAGE, uuid.New().String(), id, message)
 	database.Exec(INCREMENT_QUEUE_SIZE, id)
 
@@ -319,7 +319,7 @@ func Test_WriteMessage(test *testing.T) {
 	var id string = uuid.New().String()
 	database.Exec(WRITE_QUEUE, id, nil, nil)
 
-	var message string = "messagable"
+	var message string = uuid.New().String()
 	var err error
 	if err = WriteMessage(id, message); err != nil {
 		test.Fatal(err)

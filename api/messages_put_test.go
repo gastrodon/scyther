@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/gastrodon/scyther/storage"
 	"github.com/gastrodon/scyther/types"
+	"github.com/google/uuid"
 
 	"bytes"
 	"net/http"
@@ -15,7 +16,7 @@ func Test_PutMessage(test *testing.T) {
 	var id string
 	id, _ = storage.WriteQueue(types.QueuePost{nil, nil, false})
 
-	var message string = "foobar"
+	var message string = uuid.New().String()
 	var data *bytes.Buffer = bytes.NewBufferString(message)
 	var code int
 	var err error
@@ -73,9 +74,9 @@ func Test_PutMessage_tooShort(test *testing.T) {
 	var id string
 	id, _ = storage.WriteQueue(types.QueuePost{nil, nil, false})
 
-	var message string = "foobar"
+	var message string = uuid.New().String()
 	var data *bytes.Buffer = bytes.NewBufferString(message)
-	var size int64 = 9
+	var size int64 = 90
 	var request *http.Request = newRequestForQueue("PUT", "/queues/"+id, data, id)
 	request.ContentLength = size
 

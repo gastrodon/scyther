@@ -43,7 +43,7 @@ func Test_ResolveQueueTarget(test *testing.T) {
 func Test_ResolveQueueTarget_named(test *testing.T) {
 	test.Cleanup(storage.Clear)
 
-	var name string = "resolve_me"
+	var name string = uuid.New().String()
 	var id string
 	id, _ = storage.WriteQueue(types.QueuePost{&name, nil, false})
 
@@ -111,7 +111,7 @@ func Test_ResolveQueueTarget_subRoute(test *testing.T) {
 func Test_ResolveQueueTarget_namedSubRoute(test *testing.T) {
 	test.Cleanup(storage.Clear)
 
-	var name string = "resolve_me"
+	var name string = uuid.New().String()
 	var id string
 	id, _ = storage.WriteQueue(types.QueuePost{&name, nil, false})
 
