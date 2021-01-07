@@ -7,8 +7,8 @@ import (
 )
 
 var (
-	uuidRegex *regexp.Regexp = regexp.MustCompile(types.UUID_PATTERN)
-	nameRegex *regexp.Regexp = regexp.MustCompile(types.NAME_PATTERN)
+	uuidRegex *regexp.Regexp = regexp.MustCompile(types.UUID_ONLY_PATTERN)
+	nameRegex *regexp.Regexp = regexp.MustCompile(types.NAME_ONLY_PATTERN)
 
 	keyQueue = key("queue")
 	keyIndex = key("index")

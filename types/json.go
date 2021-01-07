@@ -7,12 +7,14 @@ import (
 )
 
 const (
-	UUID_PATTERN = `^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$`
-	NAME_PATTERN = `^[A-Za-z0-9-_]{1,255}$`
+	UUID_PATTERN      = `[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}`
+	UUID_ONLY_PATTERN = `^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$`
+	NAME_PATTERN      = `[A-Za-z0-9-_]{1,255}`
+	NAME_ONLY_PATTERN = `^[A-Za-z0-9-_]{1,255}$`
 )
 
 var (
-	nameRegex *regexp.Regexp = regexp.MustCompile(NAME_PATTERN)
+	nameRegex *regexp.Regexp = regexp.MustCompile(NAME_ONLY_PATTERN)
 )
 
 type QueueGet struct {

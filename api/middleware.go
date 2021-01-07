@@ -59,6 +59,7 @@ func ResolveQueueTarget(request *http.Request) (modified *http.Request, ok bool,
 		return
 	}
 
+	ok = true
 	modified = requestWithTarget(request, id)
 	return
 }

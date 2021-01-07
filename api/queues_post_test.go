@@ -79,6 +79,7 @@ func Test_CreateQueue_badRequest(test *testing.T) {
 		newRequestMarshalled("POST", "/queues", map[string]interface{}{"name": longName}),
 	}
 
+	var index int = 0
 	var request *http.Request
 	for _, request = range requests {
 		var code int
@@ -86,6 +87,12 @@ func Test_CreateQueue_badRequest(test *testing.T) {
 		if code, _, err = CreateQueue(request); err != nil {
 			test.Fatal(err)
 		}
+
+		if code != 400 {
+			panic(index)
+		}
+
+		index++
 
 		codeOk(code, 400, test)
 	}
