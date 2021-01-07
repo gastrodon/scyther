@@ -69,7 +69,6 @@ func Test_CreateQueue(test *testing.T) {
 
 func Test_CreateQueue_badRequest(test *testing.T) {
 	var requests []*http.Request = []*http.Request{
-		// TODO: https://github.com/gastrodon/groudon/issues/7
 		newRequest("POST", "/queues", nil),
 		newRequest("POST", "/queues", bytes.NewBuffer(make([]byte, 0))),
 		newRequest("POST", "/queues", bytes.NewBuffer([]byte{255, 165, 69})),
@@ -103,8 +102,12 @@ func Test_CreateQueue_err(test *testing.T) {
 	test.Cleanup(reconnect)
 	disconnect()
 
+	var buffer *bytes.Buffer = bytes.NewBuffer([]byte("{}"))
+
+	var code int
 	var err error
-	if _, _, err = CreateQueue(newRequest("POST", "/queues", nil)); err != nil {
+	if code, _, err = CreateQueue(newRequest("POST", "/queues", buffer)); err == nil {
+		test.Fatal(code)
 		test.Fatal("no err was retured")
 	}
 }

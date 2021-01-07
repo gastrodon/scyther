@@ -14,8 +14,12 @@ import (
 	"testing"
 )
 
+var (
+	connection string = os.Getenv("SCYTHER_CONNECTION_TEST_API")
+)
+
 func TestMain(main *testing.M) {
-	storage.Connect(os.Getenv("SCYTHER_CONNECTION_TEST_API"))
+	storage.Connect(connection)
 	storage.Clear()
 	os.Exit(main.Run())
 }
@@ -123,4 +127,14 @@ func messageOk(message, want string, test *testing.T) {
 	if message != want {
 		test.Fatalf("message incorrect, %s != %s", message, want)
 	}
+}
+
+func disconnect() {
+	defer func() { recover() }()
+
+	storage.Connect("")
+}
+
+func reconnect() {
+	storage.Connect(connection)
 }

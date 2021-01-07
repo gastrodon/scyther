@@ -7,7 +7,9 @@ import (
 	"testing"
 )
 
-func Test_GetQueues_ok(test *testing.T) {
+func Test_GetQueues(test *testing.T) {
+	test.Cleanup(storage.Clear)
+
 	var code int
 	var RMap map[string]interface{}
 	var err error
@@ -109,4 +111,14 @@ func Test_GetQueue(test *testing.T) {
 
 	codeOk(code, 200, test)
 	queueOk(RMap["queue"].(types.QueueGet), &name, &capacity, test)
+}
+
+func Test_GetQueue_err(test *testing.T) {
+	test.Cleanup(reconnect)
+	disconnect()
+
+	var err error
+	if _, _, err = GetQueue(newRequestForQueue("GET", "/queue", nil, "")); err == nil {
+		test.Fatal("no err was retured")
+	}
 }
