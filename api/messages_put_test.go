@@ -31,7 +31,7 @@ func Test_PutMessage(test *testing.T) {
 
 	var messageFetched string
 	var exists bool
-	if messageFetched, exists, _ = storage.ReadHead(id, false); !exists {
+	if messageFetched, exists, _ = storage.ReadHead(id); !exists {
 		test.Fatalf("queue %s has no message on its head", id)
 	}
 

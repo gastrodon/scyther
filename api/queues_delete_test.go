@@ -27,7 +27,7 @@ func Test_DeleteQueue(test *testing.T) {
 		test.Fatalf("queue %s wasn't deleted", id)
 	}
 
-	if _, exists, _ = storage.ReadHead(id, false); exists {
+	if _, exists, _ = storage.ReadHead(id); exists {
 		test.Fatalf("queue %s still has a message", id)
 	}
 }
