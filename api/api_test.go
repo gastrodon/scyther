@@ -82,7 +82,7 @@ func codeOk(code, want int, test *testing.T) {
 
 func uuidOk(uuid string, test *testing.T) {
 	if !uuidRegex.MatchString(uuid) {
-		test.Fatalf("%s doesn't match the pattern %s", uuid, UUID_PATTERN)
+		test.Fatalf("%s isn't valid UUIDv4", uuid)
 	}
 }
 

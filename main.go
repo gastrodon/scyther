@@ -4,6 +4,7 @@ import (
 	"github.com/gastrodon/groudon"
 	"github.com/gastrodon/scyther/api"
 	"github.com/gastrodon/scyther/storage"
+	"github.com/gastrodon/scyther/types"
 
 	"net/http"
 	"os"
@@ -11,12 +12,12 @@ import (
 
 const (
 	ROUTE_QUEUES        = `^/queues/?$`
-	ROUTE_QUEUE         = `^/queues/` + api.NAME_PATTERN + `/?$`
-	ROUTE_QUEUE_HEAD    = `^/queues/` + api.NAME_PATTERN + `/head/?$`
-	ROUTE_QUEUE_TAIL    = `^/queues/` + api.NAME_PATTERN + `/tail/?$`
-	ROUTE_QUEUE_CONSUME = `^/queues/` + api.NAME_PATTERN + `/consume/[\d]+/?$`
-	ROUTE_QUEUE_PEEK    = `^/queues/` + api.NAME_PATTERN + `/peek/[\d]+/?$`
-	ROUTE_TARGETED      = `^/queues/` + api.NAME_PATTERN + `(/.*)?$`
+	ROUTE_QUEUE         = `^/queues/` + types.NAME_PATTERN + `/?$`
+	ROUTE_QUEUE_HEAD    = `^/queues/` + types.NAME_PATTERN + `/head/?$`
+	ROUTE_QUEUE_TAIL    = `^/queues/` + types.NAME_PATTERN + `/tail/?$`
+	ROUTE_QUEUE_CONSUME = `^/queues/` + types.NAME_PATTERN + `/consume/[\d]+/?$`
+	ROUTE_QUEUE_PEEK    = `^/queues/` + types.NAME_PATTERN + `/peek/[\d]+/?$`
+	ROUTE_TARGETED      = `^/queues/` + types.NAME_PATTERN + `(/.*)?$`
 )
 
 func main() {

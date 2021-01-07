@@ -2,6 +2,17 @@ package types
 
 import (
 	"github.com/gastrodon/groudon"
+
+	"regexp"
+)
+
+const (
+	UUID_PATTERN = `^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$`
+	NAME_PATTERN = `^[A-Za-z0-9-_]{1,255}$`
+)
+
+var (
+	nameRegex *regexp.Regexp = regexp.MustCompile(NAME_PATTERN)
 )
 
 type QueueGet struct {
@@ -18,9 +29,23 @@ type QueuePost struct {
 	Ephemeral bool    `json:"ephemeral"`
 }
 
+func validOptionalName(it interface{}) (ok bool, err error) {
+	if ok = it == nil; ok {
+		return
+	}
+
+	var name string
+	if name, ok = it.(string); !ok {
+		return
+	}
+
+	ok = nameRegex.MatchString(name)
+	return
+}
+
 func (QueuePost) Validators() (values map[string]func(interface{}) (bool, error)) {
 	values = map[string]func(interface{}) (bool, error){
-		"name":      groudon.OptionalString,
+		"name":      validOptionalName,
 		"capacity":  groudon.OptionalNumber,
 		"ephemeral": groudon.OptionalBool,
 	}
