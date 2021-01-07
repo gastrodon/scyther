@@ -70,7 +70,7 @@ func Test_CreateQueue(test *testing.T) {
 func Test_CreateQueue_badRequest(test *testing.T) {
 	var requests []*http.Request = []*http.Request{
 		// TODO: https://github.com/gastrodon/groudon/issues/7
-		// newRequest("POST", "/queues", nil),
+		newRequest("POST", "/queues", nil),
 		newRequest("POST", "/queues", bytes.NewBuffer(make([]byte, 0))),
 		newRequest("POST", "/queues", bytes.NewBuffer([]byte{255, 165, 69})),
 		newRequestMarshalled("POST", "/queues", map[string]interface{}{"name": "foo bar with spaces"}),
@@ -96,5 +96,15 @@ func Test_CreateQueue_badRequest(test *testing.T) {
 		index++
 
 		codeOk(code, 400, test)
+	}
+}
+
+func Test_CreateQueue_err(test *testing.T) {
+	test.Cleanup(reconnect)
+	disconnect()
+
+	var err error
+	if _, _, err = CreateQueue(newRequest("POST", "/queues", nil)); err != nil {
+		test.Fatal("no err was retured")
 	}
 }
