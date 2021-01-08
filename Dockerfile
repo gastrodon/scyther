@@ -12,5 +12,5 @@ FROM alpine:latest
 WORKDIR /build
 COPY --from=builder /build/build .
 
-ENV MONKEBASE_CONNECTION ""
+ENV SCYTHER_CONNECTION ""
 ENTRYPOINT ./build
