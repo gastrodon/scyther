@@ -221,13 +221,15 @@ func Test_ResolveQueueTarget_nameConflictsId(test *testing.T) {
 
 func Test_ResolveQueueTarget_noSuchQueue(test *testing.T) {
 	var ok bool
+	var RMap map[string]interface{}
 	var code int
 	var err error
-	if _, ok, code, _, err = ResolveQueueTarget(newRequest("GET", "/queues/foobar", nil)); err != nil {
+	if _, ok, code, RMap, err = ResolveQueueTarget(newRequest("GET", "/queues/foobar", nil)); err != nil {
 		test.Fatal(err)
 	}
 
 	codeOk(code, 404, test)
+	errorOk(RMap, targetNotFound, test)
 
 	if ok {
 		test.Fatal("middleware is ok")
@@ -236,13 +238,15 @@ func Test_ResolveQueueTarget_noSuchQueue(test *testing.T) {
 
 func Test_ResolveQueueTarget_noTarget(test *testing.T) {
 	var ok bool
+	var RMap map[string]interface{}
 	var code int
 	var err error
-	if _, ok, code, _, err = ResolveQueueTarget(newRequest("GET", "/queues", nil)); err != nil {
+	if _, ok, code, RMap, err = ResolveQueueTarget(newRequest("GET", "/queues", nil)); err != nil {
 		test.Fatal(err)
 	}
 
 	codeOk(code, 404, test)
+	errorOk(RMap, targetNotFound, test)
 
 	if ok {
 		test.Fatal("middleware is ok")
@@ -281,9 +285,10 @@ func Test_ResolveQueueIndex_negative(test *testing.T) {
 
 func Test_ResolveQueueIndex_invalid(test *testing.T) {
 	var code int
+	var RMap map[string]interface{}
 	var ok bool
 	var err error
-	if _, ok, code, _, err = ResolveQueueIndex(newRequest("GET", "queues/foo/", nil)); err != nil {
+	if _, ok, code, RMap, err = ResolveQueueIndex(newRequest("GET", "queues/foo/", nil)); err != nil {
 		test.Fatal(err)
 	}
 
@@ -292,6 +297,7 @@ func Test_ResolveQueueIndex_invalid(test *testing.T) {
 	}
 
 	codeOk(code, 404, test)
+	errorOk(RMap, noMessage, test)
 }
 
 func Test_ValidateLength(test *testing.T) {
@@ -314,9 +320,10 @@ func Test_ValidateLength_tooLong(test *testing.T) {
 	request.ContentLength = 512
 
 	var ok bool
+	var RMap map[string]interface{}
 	var code int
 	var err error
-	if _, ok, code, _, err = ValidateLength(request); err != nil {
+	if _, ok, code, RMap, err = ValidateLength(request); err != nil {
 		panic(err)
 	}
 
@@ -325,6 +332,7 @@ func Test_ValidateLength_tooLong(test *testing.T) {
 	}
 
 	codeOk(code, 413, test)
+	errorOk(RMap, messageTooLong, test)
 }
 
 func Test_ValidateLength_invalid(test *testing.T) {
@@ -332,9 +340,10 @@ func Test_ValidateLength_invalid(test *testing.T) {
 	request.ContentLength = -1
 
 	var ok bool
+	var RMap map[string]interface{}
 	var code int
 	var err error
-	if _, ok, code, _, err = ValidateLength(request); err != nil {
+	if _, ok, code, RMap, err = ValidateLength(request); err != nil {
 		panic(err)
 	}
 
@@ -343,6 +352,7 @@ func Test_ValidateLength_invalid(test *testing.T) {
 	}
 
 	codeOk(code, 411, test)
+	errorOk(RMap, lengthRequired, test)
 }
 
 func Test_ValidateLength_missing(test *testing.T) {
@@ -350,9 +360,10 @@ func Test_ValidateLength_missing(test *testing.T) {
 	request.ContentLength = 0
 
 	var ok bool
+	var RMap map[string]interface{}
 	var code int
 	var err error
-	if _, ok, code, _, err = ValidateLength(request); err != nil {
+	if _, ok, code, RMap, err = ValidateLength(request); err != nil {
 		panic(err)
 	}
 
@@ -361,4 +372,5 @@ func Test_ValidateLength_missing(test *testing.T) {
 	}
 
 	codeOk(code, 411, test)
+	errorOk(RMap, lengthRequired, test)
 }
