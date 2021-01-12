@@ -102,11 +102,13 @@ func Test_PutMessage_pastCapacity(test *testing.T) {
 	id, _ = storage.WriteQueue(types.QueuePost{nil, &capacity, false})
 
 	var data *bytes.Buffer = bytes.NewBuffer([]byte("foobar"))
+	var RMap map[string]interface{}
 	var code int
 	var err error
-	if code, _, err = PutMessage(newRequestForQueue("PUT", "/queues/"+id, data, id)); err != nil {
+	if code, RMap, err = PutMessage(newRequestForQueue("PUT", "/queues/"+id, data, id)); err != nil {
 		test.Fatal(err)
 	}
 
 	codeOk(code, 406, test)
+	errorOk(RMap, atCapacity, test)
 }

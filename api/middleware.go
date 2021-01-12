@@ -96,7 +96,7 @@ func ValidateLength(request *http.Request) (_ *http.Request, ok bool, code int, 
 
 	if length > storage.MESSAGE_MAX_SIZE {
 		code = 413
-		RMap = lengthRequired
+		RMap = messageTooLong
 		return
 	}
 

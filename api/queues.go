@@ -1,7 +1,7 @@
 package api
 
 import (
-	"github.com/gastrodon/groudon"
+	"github.com/gastrodon/groudon/v2"
 	"github.com/gastrodon/scyther/storage"
 	"github.com/gastrodon/scyther/types"
 

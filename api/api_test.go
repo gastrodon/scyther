@@ -129,6 +129,16 @@ func messageOk(message, want string, test *testing.T) {
 	}
 }
 
+func errorOk(message, want map[string]interface{}, test *testing.T) {
+	var messageError string
+	var ok bool
+	if messageError, ok = message["error"].(string); !ok {
+		test.Fatalf("message %#v has no error", message)
+	}
+
+	messageOk(messageError, want["error"].(string), test)
+}
+
 func disconnect() {
 	defer func() { recover() }()
 

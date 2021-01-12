@@ -77,12 +77,14 @@ func Test_CreateQueue_duplicate(test *testing.T) {
 	storage.WriteQueue(queue)
 
 	var code int
+	var RMap map[string]interface{}
 	var err error
-	if code, _, err = CreateQueue(newRequestMarshalled("POST", "/queues", queue)); err != nil {
+	if code, RMap, err = CreateQueue(newRequestMarshalled("POST", "/queues", queue)); err != nil {
 		test.Fatal(err)
 	}
 
 	codeOk(code, 409, test)
+	errorOk(RMap, conflict, test)
 }
 
 func Test_CreateQueue_badRequest(test *testing.T) {
@@ -101,8 +103,9 @@ func Test_CreateQueue_badRequest(test *testing.T) {
 	var request *http.Request
 	for _, request = range requests {
 		var code int
+		var RMap map[string]interface{}
 		var err error
-		if code, _, err = CreateQueue(request); err != nil {
+		if code, RMap, err = CreateQueue(request); err != nil {
 			test.Fatal(err)
 		}
 
@@ -113,6 +116,7 @@ func Test_CreateQueue_badRequest(test *testing.T) {
 		index++
 
 		codeOk(code, 400, test)
+		errorOk(RMap, badRequest, test)
 	}
 }
 
